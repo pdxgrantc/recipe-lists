@@ -2,7 +2,7 @@ import React from 'react'
 import { Helmet } from 'react-helmet';
 
 // Firebase
-import { auth, signInWithGoogle, signOutUser } from '../firebase'
+import { auth } from '../firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import SignedOut from "../Static/SignedOut"
 
@@ -33,12 +33,13 @@ export default function Home() {
     return (
       <>
         <Helmet>
-          <title>Recipe Lists</title>
+          <title>Recipes - Home</title>
         </Helmet>
         <div className="bg-main_bg_color text-text_white h-[100vh] flex flex-col">
           <Header />
           <div className="w-full h-max basis-auto grow">
             <div className='m-auto rounded-[10px] bg-black min-h-full w-[90%]'>
+              <MyLists />
             </div>
           </div>
           <Footer />
@@ -46,4 +47,16 @@ export default function Home() {
       </>
     )
   }
+}
+
+
+function MyLists() {
+  return (
+    <>
+      <h2>Your Lists</h2>
+      <div>
+        
+      </div>
+    </>
+  )
 }

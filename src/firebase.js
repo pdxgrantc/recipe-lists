@@ -35,7 +35,21 @@ export const signInWithGoogle = () => {
     }).catch((error) => {
         console.log(error);
     }
-    );
+    ).then(() => {
+        const docRef = doc(db, "lists", auth.currentUser.uid);
+        getDoc(docRef).then((docSnap) => {
+            if (!docSnap.exists()) {
+                setDoc(docRef, {
+                    displayName: auth.currentUser.displayName,
+                    email: auth.currentUser.email,
+                    uid: auth.currentUser.uid,
+                    lists: [],
+                });
+            }
+        });
+    }).catch((error) => {
+        console.log(error);
+    });
 }
 
 export const signOutUser = () => {

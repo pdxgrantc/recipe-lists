@@ -23,7 +23,7 @@ function Desktop() {
             <Helmet>
                 <title>Sign In</title>
             </Helmet>
-            <div className="py-[16vh] bg-black">
+            <div className="py-[16vh] bg-black rounded-[6px]">
                 <div>
                     <h2 className="mx-[7rem] text-[3.25rem] text-center">You must be signed in to Google to use this app</h2>
                 </div>
