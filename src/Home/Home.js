@@ -78,7 +78,8 @@ function MyMeals() {
         {mealsData.meals &&
           mealsData.meals.map((meals, index) => (
             <li key={index}>test</li>
-          ))}
+          ))
+        }
       </ul>
     </div>
   )
