@@ -55,7 +55,7 @@ export default function Recipe() {
             <div className='m-auto rounded-[10px] h-[80%] bg-black w-[90%]'>
               <div className='flex gap-20 w-[100%] px-[4%] py-[3%]'>
 
-                {recipesData ? <>loaded</> : <>test</>}
+                {recipesData ? <>loaded</> : <>loading</>}
 
               </div>
             </div>
