@@ -81,14 +81,16 @@ function MyMeals() {
   const [recipesData, setRecipesData] = useState({});
 
   useEffect(() => {
-    const recipesDocRef = doc(db, "recipes", user.uid);
-    const unsubscribe = onSnapshot(recipesDocRef, (docSnapshot) => {
-      if (docSnapshot.exists()) {
-        setRecipesData(docSnapshot.data());
-      }
-    });
+    if (user) {
+      const recipesDocRef = doc(db, "recipes", user.uid);
+      const unsubscribe = onSnapshot(recipesDocRef, (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          setRecipesData(docSnapshot.data());
+        }
+      });
 
-    return () => unsubscribe();
+      return () => unsubscribe();
+    }
   }, [user.uid]);
 
   if (!recipesData.recipes) {
@@ -107,7 +109,7 @@ function MyMeals() {
         <div>
           <ul className='flex flex-col gap-2'>
             {recipesData.recipes &&
-              recipesData.recipes.map((recipe, index) => (
+              Object.entries(recipesData.recipes).map((recipe, index) => (
                 <Link
                   key={index}
                   className="whitespace-nowrap text-[1.6rem] leading-8 cursor-pointer w-fit border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.25vw] py-[.25rem]"

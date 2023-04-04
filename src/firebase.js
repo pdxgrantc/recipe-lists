@@ -43,7 +43,7 @@ export const signInWithGoogle = () => {
                     displayName: auth.currentUser.displayName,
                     email: auth.currentUser.email,
                     uid: auth.currentUser.uid,
-                    recipes: [],
+                    recipes: {},
                 });
             }
         });

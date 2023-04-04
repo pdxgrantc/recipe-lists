@@ -34,16 +34,16 @@ export default function NewRecipe() {
         const docRef = doc(db, 'recipes', user.uid)
         getDoc(docRef).then((docSnap) => {
             // if a recipe with the same title already exists in the recipes array, don't create a new one
-            if (docSnap.data().recipes.some((recipe) => recipe.title === recipeTitle)) {
+            if (docSnap.data().recipes.some(recipe => recipe.title === recipeTitle)) {
                 setRecipeTitle('')
                 setRecipeDescription('')
                 return alert('A recipe with that title already exists')
             }
             else {
                 setDoc(doc(db, 'recipes', user.uid), {
-                    recipes: [
+                    recipes: {
                         ...docSnap.data().recipes,
-                        {
+                        recipeTitle: {
                             title: recipeTitle,
                             description: recipeDescription,
                             link: '',
@@ -53,7 +53,7 @@ export default function NewRecipe() {
                             createdAt: new Date(),
                             lastEdited: new Date(),
                         }
-                    ]
+                    }
                 })
                 setRecipeTitle('')
                 setRecipeDescription('')

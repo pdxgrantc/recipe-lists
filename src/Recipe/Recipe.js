@@ -1,31 +1,43 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router';
 import { Helmet } from 'react-helmet';
 
 // Firebase
-import { auth, db } from '../firebase'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { doc, onSnapshot } from 'firebase/firestore'
+import { auth, db } from '../firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { doc, onSnapshot } from 'firebase/firestore';
 
 // Partials
-import Header from '../Static/Header/Header'
-import Footer from '../Static/Footer/Footer'
-import SignedOut from "../Static/SignedOut"
+import Header from '../Static/Header/Header';
+import Footer from '../Static/Footer/Footer';
+import SignedOut from '../Static/SignedOut';
 
 export default function Recipe() {
   const [user] = useAuthState(auth);
+  const [recipesData, setRecipesData] = useState(null);
+  const { recipeTitle } = useParams();
 
-  const [recipesData, setRecipesData] = useState({});
 
   useEffect(() => {
-    const recipesDocRef = doc(db, "recipes", user.uid);
-    const unsubscribe = onSnapshot(recipesDocRef, (docSnapshot) => {
-      if (docSnapshot.exists()) {
-        setRecipesData(docSnapshot.data());
-      }
-    });
+    if (user) {
+      const recipesDocRef = doc(db, 'recipes', user.uid);
+      const unsubscribe = onSnapshot(
+        recipesDocRef,
+        (docSnapshot) => {
+          if (docSnapshot.exists()) {
+            setRecipesData(docSnapshot.data());
+          }
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
 
-    return () => unsubscribe();
-  }, [user.uid]);
+      return () => unsubscribe();
+    }
+  }, [user]);
+
+  console.log(recipesData.recipes)
 
   if (!user) {
     return (
@@ -40,10 +52,8 @@ export default function Recipe() {
           <Footer />
         </div>
       </>
-    )
-  }
-
-  else {
+    );
+  } else {
     return (
       <>
         <Helmet>
@@ -54,15 +64,19 @@ export default function Recipe() {
           <div className="w-full h-max basis-auto grow">
             <div className='m-auto rounded-[10px] h-[80%] bg-black w-[90%]'>
               <div className='flex gap-20 w-[100%] px-[4%] py-[3%]'>
-
-                {recipesData ? <>loaded</> : <>loading</>}
-
+                {recipesData.recipes !== null ? (
+                  <div>
+                    <h1></h1>
+                  </div>
+                ) : (
+                  <>Loading...</>
+                )}
               </div>
             </div>
           </div>
           <Footer />
         </div>
       </>
-    )
+    );
   }
 }
