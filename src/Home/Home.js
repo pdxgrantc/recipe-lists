@@ -4,8 +4,7 @@ import { Helmet } from 'react-helmet';
 // Firebase
 import { auth, db } from '../firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { doc, getDoc, onSnapshot, query } from 'firebase/firestore'
-import { useCollectionData } from 'react-firebase-hooks/firestore'
+import { doc, onSnapshot } from 'firebase/firestore'
 
 // Partials
 import Header from '../Static/Header/Header'
@@ -61,7 +60,7 @@ function MyMeals() {
   const [mealsData, setMealsData] = useState({});
 
   useEffect(() => {
-    const mealsDocRef = doc(db, "meals", auth.currentUser.uid);
+    const mealsDocRef = doc(db, "meals", user.uid);
     const unsubscribe = onSnapshot(mealsDocRef, (docSnapshot) => {
       if (docSnapshot.exists()) {
         setMealsData(docSnapshot.data());
@@ -69,20 +68,7 @@ function MyMeals() {
     });
 
     return () => unsubscribe();
-  }, [auth.currentUser.uid]);
-
-  /*
-  const [mealsDoc, setMealsDoc] = useState()
-
-  useEffect(() => {
-    const docRef = doc(db, "meals", user.uid);
-    getDoc(docRef).then((docSnap) => {
-      if (docSnap.exists()) {
-        setMealsDoc(docSnap.data())
-      }
-    });
-  }, [user])
-  */
+  }, [user.uid]);
 
   return (
     // map listsDoc.lists
@@ -95,10 +81,6 @@ function MyMeals() {
           ))}
       </ul>
     </div>
-  )
-
-  return (
-    <></>
   )
 }
 
