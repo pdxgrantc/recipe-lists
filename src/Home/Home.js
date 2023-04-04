@@ -1,14 +1,15 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet';
 
 // Firebase
-import { auth } from '../firebase'
+import { auth, db } from '../firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import SignedOut from "../Static/SignedOut"
+import { doc, getDoc } from 'firebase/firestore'
 
 // Partials
 import Header from '../Static/Header/Header'
 import Footer from '../Static/Footer/Footer'
+import SignedOut from "../Static/SignedOut"
 
 
 export default function Home() {
@@ -51,12 +52,28 @@ export default function Home() {
 
 
 function MyLists() {
+  const [user] = useAuthState(auth);
+
+  const [listsDoc, setListsDoc] = useState()
+
+  useEffect(() => {
+    const docRef = doc(db, "lists", user.uid);
+    getDoc(docRef).then((docSnap) => {
+      if (docSnap.exists()) {
+        setListsDoc(docSnap.data())
+      }
+    });
+  }, [user])
+
+
   return (
-    <>
-      <h2>Your Lists</h2>
-      <div>
-        
-      </div>
-    </>
+    // map listsDoc.lists
+    <div className="flex flex-col">
+      {listsDoc?.lists.map((list) => {
+        return (
+          <p>test</p>
+        )
+      })}
+    </div>
   )
 }
