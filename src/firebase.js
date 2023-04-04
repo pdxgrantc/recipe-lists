@@ -36,14 +36,14 @@ export const signInWithGoogle = () => {
         console.log(error);
     }
     ).then(() => {
-        const docRef = doc(db, "lists", auth.currentUser.uid);
+        const docRef = doc(db, "meals", auth.currentUser.uid);
         getDoc(docRef).then((docSnap) => {
             if (!docSnap.exists()) {
                 setDoc(docRef, {
                     displayName: auth.currentUser.displayName,
                     email: auth.currentUser.email,
                     uid: auth.currentUser.uid,
-                    lists: [],
+                    meals: [],
                 });
             }
         });

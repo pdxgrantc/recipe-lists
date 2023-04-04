@@ -19,9 +19,9 @@ export default function DesktopHeader() {
                 <div className="bg-dark_grey w-[100%] h-[80px]">
                     <div className="h-[100%] flex justify-between pr-[3vw]">
                         <Link to="/">
-                            <div className='flex gap-4 h-[100%] w-[28rem] bg-black pl-[2vw]'>
+                            <div className='flex gap-7 h-[100%] w-[28rem] bg-black pl-[2vw]'>
                             <Basket className='h-[4.5rem] my-auto'></Basket>
-                                <h1 className="align-middle text-[3.25rem] font-bold cursor-pointer" to="/">Recipes</h1>
+                                <h1 className="align-middle text-[3.25rem] font-bold cursor-pointer" to="/">Home</h1>
                             </div>
                         </Link>
                         <div className="my-auto flex justify-around">
@@ -39,9 +39,9 @@ export default function DesktopHeader() {
             <div className="bg-dark_grey w-[100%] h-80px">
                 <div className="h-[100%] flex justify-between pr-[3vw]">
                     <Link to="/">
-                        <div className='flex gap-4 h-[100%] w-[25vw] bg-black pl-[2vw]'>
+                        <div className='flex gap-7 h-[100%] w-[25vw] bg-black pl-[2vw]'>
                             <Basket className='h-[4.5rem] my-auto'></Basket>
-                            <h1 className="align-middle text-[3.25rem] font-bold cursor-pointer" to="/">Recipes</h1>
+                            <h1 className="align-middle text-[3.25rem] font-bold cursor-pointer" to="/">Sign In</h1>
                         </div>
                     </Link>
                     <div

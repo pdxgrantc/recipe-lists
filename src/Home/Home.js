@@ -40,7 +40,10 @@ export default function Home() {
           <Header />
           <div className="w-full h-max basis-auto grow">
             <div className='m-auto rounded-[10px] bg-black min-h-full w-[90%]'>
-              <MyLists />
+              <div className='flex gap-5 w-[100%] px-[4%] py-[3%]'>
+                <MyMeals />
+                <CreateList />
+              </div>
             </div>
           </div>
           <Footer />
@@ -51,7 +54,7 @@ export default function Home() {
 }
 
 
-function MyLists() {
+function MyMeals() {
   const [user] = useAuthState(auth);
 
   const [listsDoc, setListsDoc] = useState()
@@ -68,12 +71,21 @@ function MyLists() {
 
   return (
     // map listsDoc.lists
-    <div className="flex flex-col">
+    <div className="flex flex-col w-[25%]">
+      <h2>Your Lists</h2>
       {listsDoc?.lists.map((list) => {
         return (
           <p>test</p>
         )
       })}
+    </div>
+  )
+}
+
+function CreateList() {
+  return (
+    <div className='w-auto'>
+      <h2>Create Recipe</h2>
     </div>
   )
 }
