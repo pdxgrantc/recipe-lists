@@ -75,6 +75,21 @@ function Content() {
     }
   }, [user]);
 
+  const deleteRecipe = () => {
+    if (recipesData.recipes[recipeTitle]) {
+      delete recipesData.recipes[recipeTitle];
+      db.collection('recipes')
+        .doc(user.uid)
+        .set(recipesData)
+        .catch((error) => {
+          console.error('Error writing document: ', error);
+        });
+    }
+    // redirect to my recipes page
+    window.location.href = '/my-recipes';
+  };
+
+
   if (!recipesData.recipes || !recipesData.recipes[recipeTitle] || !recipesData.recipes[recipeTitle].title) {
     return (
       <>
