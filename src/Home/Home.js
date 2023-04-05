@@ -91,7 +91,7 @@ function MyMeals() {
 
       return () => unsubscribe();
     }
-  }, [user.uid]);
+  }, [user, user.uid]);
 
   if (!recipesData.recipes) {
     return (
@@ -107,18 +107,18 @@ function MyMeals() {
     else {
       return (
         <div>
-          <ul className='flex flex-col gap-2'>
+          <div className='flex flex-col gap-2'>
             {recipesData.recipes &&
-              Object.entries(recipesData.recipes).map((recipe, index) => (
+              Object.keys(recipesData.recipes).map((recipe, index) => (
                 <Link
                   key={index}
                   className="whitespace-nowrap text-[1.6rem] leading-8 cursor-pointer w-fit border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.25vw] py-[.25rem]"
-                  to={"/My-Recipes/" + recipe.title}>
-                  {recipe.title}
+                  to={"/My-Recipes/" + recipesData.recipes[recipe].title}>
+                  {recipesData.recipes[recipe].title}
                 </Link>
               ))
             }
-          </ul>
+          </div>
         </div>
       )
     }

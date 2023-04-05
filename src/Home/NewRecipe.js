@@ -37,6 +37,7 @@ export default function NewRecipe() {
             if (docSnap.data().recipes.hasOwnProperty(recipeTitle)) {
                 setRecipeTitle('')
                 setRecipeDescription('')
+                setRecipeLink('')
                 return alert('A recipe with that title already exists')
             }
             else {

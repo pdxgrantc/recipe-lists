@@ -36,9 +36,7 @@ export default function Recipe() {
       return () => unsubscribe();
     }
   }, [user]);
-
-  console.log(recipesData.recipes)
-
+  
   if (!user) {
     return (
       <>
