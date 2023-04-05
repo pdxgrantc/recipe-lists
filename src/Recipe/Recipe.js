@@ -11,6 +11,10 @@ import Header from '../Static/Header/Header';
 import Footer from '../Static/Footer/Footer';
 import SignedOut from '../Static/SignedOut';
 
+// SVGs
+import { ReactComponent as Pencil } from '../Static/SVG/Pencil.svg';
+import { ReactComponent as Trashcan } from '../Static/SVG/Trashcan.svg';
+
 export default function Recipe() {
   const [user] = useAuthState(auth);
 
@@ -87,10 +91,22 @@ function Content() {
         <Helmet>
           <title>{recipesData.recipes[recipeTitle].title}</title>
         </Helmet>
-        <div className='flex flex-col gap-3'>
-          <div>
-            <h2 className='text-[2.75rem] font-semibold'>{recipesData.recipes[recipeTitle].title}</h2>
-            <h3 className='text-[1.5rem] font-semibold'>{recipesData.recipes[recipeTitle].description}</h3>
+        <div className='flex flex-col gap-3 w-full'>
+          <div className='flex justify-between on_desktop:w-[90%]'>
+            <div>
+              <h2 className='text-[2.75rem] font-semibold'>{recipesData.recipes[recipeTitle].title}</h2>
+              <h3 className='text-[1.5rem] font-semibold'>{recipesData.recipes[recipeTitle].description}</h3>
+            </div>
+            <div className='flex my-auto'>
+              <div className='flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem]'>
+                <Pencil className='w-[2.25rem] h-[2.25rem]' />
+                <h4 className='text-2xl font-semibold'>Edit</h4>
+              </div>
+              <div className='flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem]'>
+                <Trashcan className='w-[2.25rem] h-[2.25rem]' />
+                <h4 className='text-2xl font-semibold'>Delete</h4>
+              </div>
+            </div>
           </div>
           <div>
             <h4 className='text-[1.75rem] font-semibold'>Ingredients</h4>
