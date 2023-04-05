@@ -106,20 +106,28 @@ function MyMeals() {
     }
     else {
       return (
-        <div>
-          <div className='flex flex-col gap-2'>
-            {recipesData.recipes &&
-              Object.keys(recipesData.recipes).map((recipe, index) => (
-                <Link
-                  key={index}
-                  className="whitespace-nowrap text-[1.6rem] leading-8 cursor-pointer w-fit border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.25vw] py-[.25rem]"
-                  to={"/My-Recipes/" + recipesData.recipes[recipe].title}>
-                  {recipesData.recipes[recipe].title}
-                </Link>
-              ))
-            }
+        <>
+          <div>
+            <div className='flex flex-col gap-2 h-fit'>
+              {recipesData.recipes &&
+                Object.keys(recipesData.recipes).map((recipe, index) => (
+                  <Link
+                    key={index}
+                    className="whitespace-nowrap text-[1.6rem] leading-8 cursor-pointer w-fit border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.25vw] py-[.25rem]"
+                    to={"/My-Recipes/" + recipesData.recipes[recipe].title}>
+                    {recipesData.recipes[recipe].title}
+                  </Link>
+                ))
+              }
+            </div>
+
           </div>
-        </div>
+              <div className='h-6'></div>
+          <Link to="/My-Recipes"
+            className="whitespace-nowrap text-[1.6rem] leading-8 cursor-pointer w-fit border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.25vw] py-[.25rem]">
+            All Recipes
+          </Link>
+        </>
       )
     }
   }

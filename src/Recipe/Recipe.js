@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router';
 import { Helmet } from 'react-helmet';
 
 // Firebase
@@ -14,9 +13,44 @@ import SignedOut from '../Static/SignedOut';
 
 export default function Recipe() {
   const [user] = useAuthState(auth);
-  const [recipesData, setRecipesData] = useState(null);
-  const { recipeTitle } = useParams();
 
+  if (!user) {
+    return (
+      <>
+        <div className="mx-auto bg-main_bg_color text-text_white min-h-[100vh] flex flex-col">
+          <Header />
+          <div className="w-full basis-auto grow">
+            <div className='mx-auto w-fit'>
+              <SignedOut />
+            </div>
+          </div>
+          <Footer />
+        </div>
+      </>
+    );
+  } else {
+    return (
+      <div className="bg-main_bg_color text-text_white h-[100vh] flex flex-col">
+        <Header />
+        <div className="w-full h-max basis-auto grow">
+          <div className='m-auto rounded-[10px] h-[80%] bg-black w-[90%]'>
+            <div className='flex gap-20 w-[100%] px-[4%] py-[3%]'>
+              <Content />
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+}
+
+function Content() {
+  const [user] = useAuthState(auth);
+  const [recipesData, setRecipesData] = useState({});
+  var recipeTitle = window.location.pathname.split('/')[2];
+  // replace every '%20' with ' ' in recipeTitle
+  recipeTitle = recipeTitle.replace(/%20/g, ' ');
 
   useEffect(() => {
     if (user) {
@@ -36,45 +70,25 @@ export default function Recipe() {
       return () => unsubscribe();
     }
   }, [user]);
-  
-  if (!user) {
-    return (
-      <>
-        <div className="mx-auto bg-main_bg_color text-text_white min-h-[100vh] flex flex-col">
-          <Header />
-          <div className="w-full basis-auto grow">
-            <div className='mx-auto w-fit'>
-              <SignedOut />
-            </div>
-          </div>
-          <Footer />
-        </div>
-      </>
-    );
-  } else {
+
+  if (!recipesData.recipes || !recipesData.recipes[recipeTitle] || !recipesData.recipes[recipeTitle].title) {
     return (
       <>
         <Helmet>
-          <title>Recipe</title>
+          Loading...
         </Helmet>
-        <div className="bg-main_bg_color text-text_white h-[100vh] flex flex-col">
-          <Header />
-          <div className="w-full h-max basis-auto grow">
-            <div className='m-auto rounded-[10px] h-[80%] bg-black w-[90%]'>
-              <div className='flex gap-20 w-[100%] px-[4%] py-[3%]'>
-                {recipesData.recipes !== null ? (
-                  <div>
-                    <h1></h1>
-                  </div>
-                ) : (
-                  <>Loading...</>
-                )}
-              </div>
-            </div>
-          </div>
-          <Footer />
-        </div>
+        Loading...
       </>
     );
+  }
+  else {
+    return (
+      <>
+        <Helmet>
+          <title>{recipesData.recipes[recipeTitle].title}</title>
+        </Helmet>
+        <h2>{recipesData.recipes[recipeTitle].title}</h2>
+      </>
+    )
   }
 }

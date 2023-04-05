@@ -113,8 +113,8 @@ function DropdownMenu() {
             return (
                 <DropdownItem
                     leftIcon={<Basket />}
-                    route="/Ingredients">
-                    Lists
+                    route="/My-Recipes">
+                    My Recipes
                 </DropdownItem>
             )
         }
