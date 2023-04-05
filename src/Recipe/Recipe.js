@@ -87,7 +87,87 @@ function Content() {
         <Helmet>
           <title>{recipesData.recipes[recipeTitle].title}</title>
         </Helmet>
-        <h2>{recipesData.recipes[recipeTitle].title}</h2>
+        <div className='flex flex-col gap-3'>
+          <div>
+            <h2 className='text-[2.75rem] font-semibold'>{recipesData.recipes[recipeTitle].title}</h2>
+            <h3 className='text-[1.5rem] font-semibold'>{recipesData.recipes[recipeTitle].description}</h3>
+          </div>
+          <div>
+            <h4 className='text-[1.75rem] font-semibold'>Ingredients</h4>
+            <div className='pl-[1.5rem]'>
+              {(recipesData.recipes[recipeTitle].ingredients.length === 0) ?
+                <div>
+                  <p className='text-[1.25rem]'>
+                    No ingredients.
+                  </p>
+                </div>
+                :
+                <>
+                  {recipesData.recipes[recipeTitle].ingredients.map((ingredient, index) => {
+                    return (
+                      <div key={index}>
+                        <p className='text-[1.25rem]'>
+                          {index + 1}.&nbsp;&nbsp;
+                          {ingredient}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </>
+              }
+            </div>
+          </div>
+          <div>
+            <h4 className='text-[1.75rem] font-semibold'>Steps</h4>
+            <div className='pl-[1.5rem]'>
+              {(recipesData.recipes[recipeTitle].steps.length === 0) ?
+                <div>
+                  <p className='text-[1.25rem]'>
+                    No steps.
+                  </p>
+                </div>
+                :
+                <>
+                  {recipesData.recipes[recipeTitle].steps.map((ingredient, index) => {
+                    return (
+                      <div key={index}>
+                        <p className='text-[1.25rem]'>
+                          {index + 1}.&nbsp;&nbsp;
+                          {ingredient}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </>
+              }
+            </div>
+          </div>
+          <div>
+            <h4 className='text-[1.75rem] font-semibold'>Notes</h4>
+            <div className='pl-[1.5rem]'>
+              {(recipesData.recipes[recipeTitle].notes.length === 0) ?
+                <div>
+                  <p className='text-[1.25rem]'>
+                    No notes.
+                  </p>
+                </div>
+                :
+                <>
+                  {recipesData.recipes[recipeTitle].notes.map((ingredient, index) => {
+                    return (
+                      <div key={index}>
+                        <p className='text-[1.25rem]'>
+                          {index + 1}.&nbsp;&nbsp;
+                          {ingredient}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </>
+              }
+            </div>
+          </div>
+        </div>
       </>
     )
   }
