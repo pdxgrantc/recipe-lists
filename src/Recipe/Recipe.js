@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 // Firebase
 import { auth, db } from '../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { doc, onSnapshot } from 'firebase/firestore';
+import { doc, getDoc, onSnapshot, updateDoc, FieldValue, deleteField, collection } from 'firebase/firestore';
 
 // Partials
 import Header from '../Static/Header/Header';
@@ -12,7 +12,7 @@ import Footer from '../Static/Footer/Footer';
 import SignedOut from '../Static/SignedOut';
 
 // SVGs
-import { ReactComponent as Pencil } from '../Static/SVG/Pencil.svg';
+import { BiEditAlt as Pencil } from 'react-icons/bi';
 import { ReactComponent as Trashcan } from '../Static/SVG/Trashcan.svg';
 
 export default function Recipe() {
@@ -52,9 +52,9 @@ export default function Recipe() {
 function Content() {
   const [user] = useAuthState(auth);
   const [recipesData, setRecipesData] = useState({});
-  var recipeTitle = window.location.pathname.split('/')[2];
+  const rawRecipeTitle = window.location.pathname.split('/')[2];
   // replace every '%20' with ' ' in recipeTitle
-  recipeTitle = recipeTitle.replace(/%20/g, ' ');
+  var recipeTitle = rawRecipeTitle.replace(/%20/g, ' ');
 
   useEffect(() => {
     if (user) {
@@ -75,20 +75,45 @@ function Content() {
     }
   }, [user]);
 
-  const deleteRecipe = () => {
-    if (recipesData.recipes[recipeTitle]) {
-      delete recipesData.recipes[recipeTitle];
-      db.collection('recipes')
-        .doc(user.uid)
-        .set(recipesData)
-        .catch((error) => {
-          console.error('Error writing document: ', error);
-        });
-    }
-    // redirect to my recipes page
-    window.location.href = '/my-recipes';
-  };
+  /*
+  async function deleteRecipe() {
+    const docRef = doc(db, 'recipes', user.uid);
 
+    await updateDoc(docRef, {
+      "recipes": {
+        [recipeTitle]: FieldValue.delete()
+      }
+    });
+  }
+  */
+
+  /*
+  async function deleteRecipe() {
+    try {
+      const path = "/recipes" + user.uid + '/recipes/';
+      const mapRef = doc(db, path);
+      const subComponentPath = recipeTitle;
+      const deleteObj = {
+        [subComponentPath]: null
+      };
+      await updateDoc(mapRef, deleteObj);
+      console.log("Sub-component deleted successfully!");
+    } catch (error) {
+      console.log("Error deleting sub-component:", error);
+    }
+
+    //window.location.href = '/my-recipes';
+  }
+  */
+
+
+  async function deleteRecipe() {
+    const userDocRef = doc(collection(db, 'users'), user.uid);
+    await updateDoc(userDocRef, {
+      'recipes.Baked Mac and Cheese': deleteField()
+    });
+    console.log(`Deleted recipe ${recipeTitle} for user ${user.uid}`);
+  }
 
   if (!recipesData.recipes || !recipesData.recipes[recipeTitle] || !recipesData.recipes[recipeTitle].title) {
     return (
@@ -117,7 +142,7 @@ function Content() {
                 <Pencil className='w-[2.25rem] h-[2.25rem]' />
                 <h4 className='text-2xl font-semibold'>Edit</h4>
               </div>
-              <div className='flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem]'>
+              <div onClick={deleteRecipe} className='flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem]'>
                 <Trashcan className='w-[2.25rem] h-[2.25rem]' />
                 <h4 className='text-2xl font-semibold'>Delete</h4>
               </div>

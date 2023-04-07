@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import { getFirestore, doc, getDoc, setDoc, addDoc, collection } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCy8rzc9cIa9dvU66qI7nblV1049xIda3Q",
@@ -36,6 +36,16 @@ export const signInWithGoogle = () => {
         console.log(error);
     }
     ).then(() => {
+        // create a subcollection in the users/uid collection for recipes
+        const parentRef = doc(db, "users", auth.currentUser.uid);
+        const recipeRef = collection(parentRef, "recipes");
+        addDoc(recipeRef, {});
+    }).catch((error) => {
+        console.log(error);
+    });
+
+
+    /*.then(() => {
         const docRef = doc(db, "recipes", auth.currentUser.uid);
         getDoc(docRef).then((docSnap) => {
             if (!docSnap.exists()) {
@@ -50,6 +60,7 @@ export const signInWithGoogle = () => {
     }).catch((error) => {
         console.log(error);
     });
+    */
 }
 
 export const signOutUser = () => {
