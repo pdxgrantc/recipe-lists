@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 // Firebase
 import { auth, db } from '../firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { doc, onSnapshot } from 'firebase/firestore'
+import { doc, onSnapshot, query, orderBy, collection } from 'firebase/firestore'
 
 // Partials
 import Header from '../Static/Header/Header'
@@ -58,23 +58,18 @@ function Content() {
     const [recipesData, setRecipesData] = useState({});
 
     useEffect(() => {
-        if (user) {
-            const recipesDocRef = doc(db, 'recipes', user.uid);
-            const unsubscribe = onSnapshot(
-                recipesDocRef,
-                (docSnapshot) => {
-                    if (docSnapshot.exists()) {
-                        setRecipesData(docSnapshot.data());
-                    }
-                },
-                (error) => {
-                    console.error(error);
-                }
-            );
-
-            return () => unsubscribe();
-        }
+        const q = query(collection(db, "users", user.uid, "recipes"), orderBy("lastEditedAt", "desc"));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            const data = querySnapshot.docs.map((doc) => ({
+                ...doc.data(),
+                id: doc.id,
+            }));
+            setRecipesData({ recipes: data });
+        });
+        return unsubscribe;
     }, [user]);
+
+    console.log(recipesData.recipes);
 
     if (!recipesData.recipes) {
         return (
@@ -92,20 +87,19 @@ function Content() {
     }
     else {
         return (
-            <div className='flex flex-col gap-6'>
-                <div className="flex flex-col w-[30%]">
-                    <h3 className="text-[2.25rem] font-light">Welcome</h3>
+            <div className='flex flex-col gap-6 w-[80%] ml-0'>
+                <div className="flex flex-col w-[100%]">
                     <h2 className="text-[2.75rem] font-semibold leading-10 pb-[2vh] whitespace-nowrap">{user.displayName}'s Recipes</h2>
                 </div>
                 <div className='on_desktop:grid grid-cols-2 on_mobile:flex on_mobile:flex-col gap-5 w-full'>
-                    {recipesData.recipes && Object.keys(recipesData.recipes).map((recipe, index) => (
+                    {recipesData.recipes.map((recipe) => (
                         <Link
-                            key={index}
-                            className="w-full rounded-[4px] p-3 border-[2px] border-text_white hover:bg-apps_bg_pressed hover:border-transparent"
-                            to={"/My-Recipes/" + recipesData.recipes[recipe].title}>
-                            <h4 className='whitespace-nowrap text-[1.6rem]'>{recipesData.recipes[recipe].title}</h4>
-                            <h5>{recipesData.recipes[recipe].description}</h5>
-                        </Link>
+                        key={recipe.id}
+                        className="w-full rounded-[4px] p-3 border-[2px] border-text_white hover:bg-apps_bg_pressed hover:border-transparent"
+                        to={"/My-Recipes/" + recipe.title}>
+                        <h4 className='whitespace-nowrap text-[1.6rem]'>{recipe.title}</h4>
+                        <h5>{recipesData.description}</h5>
+                    </Link>
                     ))}
                 </div>
             </div>

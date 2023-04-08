@@ -51,19 +51,18 @@ export default function Recipe() {
 
 function Content() {
   const [user] = useAuthState(auth);
-  const [recipesData, setRecipesData] = useState({});
+  const [recipeData, setRecipeData] = useState();
   const rawRecipeTitle = window.location.pathname.split('/')[2];
-  // replace every '%20' with ' ' in recipeTitle
   var recipeTitle = rawRecipeTitle.replace(/%20/g, ' ');
 
   useEffect(() => {
     if (user) {
-      const recipesDocRef = doc(db, 'recipes', user.uid);
+      const recipeDocRef = doc(db, 'users', user.uid, 'recipes', recipeTitle);
       const unsubscribe = onSnapshot(
-        recipesDocRef,
+        recipeDocRef,
         (docSnapshot) => {
           if (docSnapshot.exists()) {
-            setRecipesData(docSnapshot.data());
+            setRecipeData(docSnapshot.data());
           }
         },
         (error) => {
@@ -75,38 +74,6 @@ function Content() {
     }
   }, [user]);
 
-  /*
-  async function deleteRecipe() {
-    const docRef = doc(db, 'recipes', user.uid);
-
-    await updateDoc(docRef, {
-      "recipes": {
-        [recipeTitle]: FieldValue.delete()
-      }
-    });
-  }
-  */
-
-  /*
-  async function deleteRecipe() {
-    try {
-      const path = "/recipes" + user.uid + '/recipes/';
-      const mapRef = doc(db, path);
-      const subComponentPath = recipeTitle;
-      const deleteObj = {
-        [subComponentPath]: null
-      };
-      await updateDoc(mapRef, deleteObj);
-      console.log("Sub-component deleted successfully!");
-    } catch (error) {
-      console.log("Error deleting sub-component:", error);
-    }
-
-    //window.location.href = '/my-recipes';
-  }
-  */
-
-
   async function deleteRecipe() {
     const userDocRef = doc(collection(db, 'users'), user.uid);
     await updateDoc(userDocRef, {
@@ -115,7 +82,17 @@ function Content() {
     console.log(`Deleted recipe ${recipeTitle} for user ${user.uid}`);
   }
 
-  if (!recipesData.recipes || !recipesData.recipes[recipeTitle] || !recipesData.recipes[recipeTitle].title) {
+  const openLinkInNewTab = () => {
+    var url = recipeData.link;
+    // check if first part of recipeData.link is 'https://'
+    if ((!recipeData.link.startsWith('https://')) || (!recipeData.link.startsWith('http://'))) {
+      url = 'http://' + url;
+    }
+    const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
+    if (newWindow) newWindow.opener = null
+  }
+
+  if (!recipeData) {
     return (
       <>
         <Helmet>
@@ -129,13 +106,14 @@ function Content() {
     return (
       <>
         <Helmet>
-          <title>{recipesData.recipes[recipeTitle].title}</title>
+          <title>{recipeData.title}</title>
         </Helmet>
         <div className='flex flex-col gap-3 w-full'>
           <div className='flex justify-between on_desktop:w-[90%]'>
             <div>
-              <h2 className='text-[2.75rem] font-semibold'>{recipesData.recipes[recipeTitle].title}</h2>
-              <h3 className='text-[1.5rem] font-semibold'>{recipesData.recipes[recipeTitle].description}</h3>
+              <h2 className='text-[2.75rem] font-semibold'>{recipeData.title}</h2>
+              <h3 className='text-[1.5rem] font-semibold'>{recipeData.description}</h3>
+              <h3 className='text-[1.25rem] font-semibold cursor-pointer' onClick={openLinkInNewTab} >Your Link</h3>
             </div>
             <div className='flex my-auto'>
               <div className='flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem]'>
@@ -151,7 +129,7 @@ function Content() {
           <div>
             <h4 className='text-[1.75rem] font-semibold'>Ingredients</h4>
             <div className='pl-[1.5rem]'>
-              {(recipesData.recipes[recipeTitle].ingredients.length === 0) ?
+              {(recipeData.ingredients.length === 0) ?
                 <div>
                   <p className='text-[1.25rem]'>
                     No ingredients.
@@ -159,7 +137,7 @@ function Content() {
                 </div>
                 :
                 <>
-                  {recipesData.recipes[recipeTitle].ingredients.map((ingredient, index) => {
+                  {recipeData.ingredients.map((ingredient, index) => {
                     return (
                       <div key={index}>
                         <p className='text-[1.25rem]'>
@@ -176,7 +154,7 @@ function Content() {
           <div>
             <h4 className='text-[1.75rem] font-semibold'>Steps</h4>
             <div className='pl-[1.5rem]'>
-              {(recipesData.recipes[recipeTitle].steps.length === 0) ?
+              {(recipeData.steps.length === 0) ?
                 <div>
                   <p className='text-[1.25rem]'>
                     No steps.
@@ -184,7 +162,7 @@ function Content() {
                 </div>
                 :
                 <>
-                  {recipesData.recipes[recipeTitle].steps.map((ingredient, index) => {
+                  {recipeData.steps.map((ingredient, index) => {
                     return (
                       <div key={index}>
                         <p className='text-[1.25rem]'>
@@ -201,7 +179,7 @@ function Content() {
           <div>
             <h4 className='text-[1.75rem] font-semibold'>Notes</h4>
             <div className='pl-[1.5rem]'>
-              {(recipesData.recipes[recipeTitle].notes.length === 0) ?
+              {(recipeData.notes.length === 0) ?
                 <div>
                   <p className='text-[1.25rem]'>
                     No notes.
@@ -209,7 +187,7 @@ function Content() {
                 </div>
                 :
                 <>
-                  {recipesData.recipes[recipeTitle].notes.map((ingredient, index) => {
+                  {recipeData.notes.map((ingredient, index) => {
                     return (
                       <div key={index}>
                         <p className='text-[1.25rem]'>

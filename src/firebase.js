@@ -34,33 +34,7 @@ export const signInWithGoogle = () => {
         });
     }).catch((error) => {
         console.log(error);
-    }
-    ).then(() => {
-        // create a subcollection in the users/uid collection for recipes
-        const parentRef = doc(db, "users", auth.currentUser.uid);
-        const recipeRef = collection(parentRef, "recipes");
-        addDoc(recipeRef, {});
-    }).catch((error) => {
-        console.log(error);
     });
-
-
-    /*.then(() => {
-        const docRef = doc(db, "recipes", auth.currentUser.uid);
-        getDoc(docRef).then((docSnap) => {
-            if (!docSnap.exists()) {
-                setDoc(docRef, {
-                    displayName: auth.currentUser.displayName,
-                    email: auth.currentUser.email,
-                    uid: auth.currentUser.uid,
-                    recipes: {},
-                });
-            }
-        });
-    }).catch((error) => {
-        console.log(error);
-    });
-    */
 }
 
 export const signOutUser = () => {

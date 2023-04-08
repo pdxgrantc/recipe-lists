@@ -5,7 +5,7 @@ import validator from 'validator'
 
 // Firebase
 import { auth, db } from '../firebase'
-import { doc, getDoc, setDoc } from 'firebase/firestore'
+import { doc, getDoc, setDoc, collection, query, where, getDocs } from 'firebase/firestore'
 import { useAuthState } from 'react-firebase-hooks/auth'
 
 export default function NewRecipe() {
@@ -31,38 +31,35 @@ export default function NewRecipe() {
             }
         }
 
-        const docRef = doc(db, 'recipes', user.uid)
-        getDoc(docRef).then((docSnap) => {
-            // if a recipe with the same title already exists in the recipes array, don't create a new one
-            if (docSnap.data().recipes.hasOwnProperty(recipeTitle)) {
+        const userDocRef = doc(db, 'users', user.uid)
+        const recipesRef = collection(userDocRef, 'recipes')
+
+        const recipeDocRef = doc(recipesRef, recipeTitle);
+
+        getDoc(recipeDocRef)
+          .then((doc) => {
+            if (doc.exists()) {
+                alert('A recipe with that title already exists')
                 setRecipeTitle('')
-                setRecipeDescription('')
-                setRecipeLink('')
-                return alert('A recipe with that title already exists')
-            }
-            else {
-                setDoc(doc(db, 'recipes', user.uid), {
-                    recipes: {
-                        ...docSnap.data().recipes,
-                         [recipeTitle]: {
-                            title: recipeTitle,
-                            description: recipeDescription,
-                            link: recipeLink,
-                            ingredients: [],
-                            steps: [],
-                            notes: [], // bulleted list
-                            createdAt: new Date(),
-                            lastEdited: new Date(),
-                        }
-                    }
+            } else {
+                setDoc(recipeDocRef, {
+                    title: recipeTitle,
+                    description: recipeDescription,
+                    link: recipeLink,
+                    ingredients: [],
+                    steps: [],
+                    notes: [], // bulleted list
+                    createdAt: new Date(),
+                    lastEditedAt: new Date(),
                 })
                 setRecipeTitle('')
                 setRecipeDescription('')
                 setRecipeLink('')
             }
-        }).catch((error) => {
-            console.log(error)
-        })
+          })
+          .catch((error) => {
+            console.log('Error getting document:', error);
+          });
     }
 
     const reset = (e) => {
@@ -71,6 +68,7 @@ export default function NewRecipe() {
         setRecipeDescription('')
         setRecipeLink('')
     }
+
 
     return (
         <div className='w-auto'>

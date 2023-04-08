@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 // Firebase
 import { auth, db } from '../firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { doc, onSnapshot } from 'firebase/firestore'
+import { collection, query, orderBy, limit, onSnapshot, doc } from 'firebase/firestore';
 
 // Partials
 import NewRecipe from './NewRecipe'
@@ -67,7 +67,7 @@ function SideBar() {
         <div>
           <h2 className="text-[2.25rem] font-semibold">Your Recipes</h2>
           <div className="text-[1.5rem]">
-            <MyMeals />
+            <RecipesList />
           </div>
         </div>
       </div>
@@ -75,33 +75,34 @@ function SideBar() {
   )
 }
 
-function MyMeals() {
+// assuming you have already initialized Firebase using the Firebase app
+
+
+function RecipesList() {
   const [user] = useAuthState(auth);
+  const [recipes, setRecipes] = useState([]);
 
-  const [recipesData, setRecipesData] = useState({});
-
-  useEffect(() => {
-    if (user) {
-      const recipesDocRef = doc(db, "recipes", user.uid);
-      const unsubscribe = onSnapshot(recipesDocRef, (docSnapshot) => {
-        if (docSnapshot.exists()) {
-          setRecipesData(docSnapshot.data());
-        }
-      });
-
-      return () => unsubscribe();
+  const unsubscribe = onSnapshot(
+    query(collection(db, "users", user.uid, "recipes"), orderBy("lastEditedAt", "desc"), limit(5)),
+    (snapshot) => {
+      const recipes = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setRecipes(recipes);
+      // Do something with the recipes array
     }
-  }, [user, user.uid]);
+  );
 
-  if (!recipesData.recipes) {
+  if (!recipes) {
     return (
       <div className="text-[1.75rem] leading-8">Loading...</div>
     )
   }
   else {
-    if ((recipesData.recipes) && (recipesData.recipes.length === 0)) {
+    if (recipes.length === 0) {
       return (
-        <div className="text-[1.75rem] leading-8">You have no lists</div>
+        <div className="text-[1.75rem] leading-8 whitespace-nowrap">You have no recipes</div>
       )
     }
     else {
@@ -109,26 +110,25 @@ function MyMeals() {
         <>
           <div>
             <div className='flex flex-col gap-2 h-fit'>
-              {recipesData.recipes &&
-                Object.keys(recipesData.recipes).map((recipe, index) => (
-                  <Link
-                    key={index}
-                    className="whitespace-nowrap text-[1.6rem] leading-8 cursor-pointer w-fit border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.25vw] py-[.25rem]"
-                    to={"/My-Recipes/" + recipesData.recipes[recipe].title}>
-                    {recipesData.recipes[recipe].title}
-                  </Link>
-                ))
+              {recipes.map((recipe) => (
+                <Link
+                  key={recipe.id}
+                  className="whitespace-nowrap text-[1.6rem] leading-8 cursor-pointer w-fit border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.5vw] py-[.25rem]"
+                  to={"/My-Recipes/" + recipe.title}>
+                  {recipe.title}
+                </Link>
+              ))
               }
             </div>
 
           </div>
-              <div className='h-6'></div>
+          <div className='h-6'></div>
           <Link to="/My-Recipes"
-            className="whitespace-nowrap text-[1.6rem] leading-8 cursor-pointer w-fit border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.25vw] py-[.25rem]">
+            className="whitespace-nowrap text-[1.6rem] leading-8 cursor-pointer w-fit border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.5vw] py-[.25rem]">
             All Recipes
           </Link>
         </>
-      )
+      );
     }
   }
 }
