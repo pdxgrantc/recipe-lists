@@ -5,7 +5,7 @@ import validator from 'validator'
 
 // Firebase
 import { auth, db } from '../firebase'
-import { doc, getDoc, setDoc, collection, query, where, getDocs } from 'firebase/firestore'
+import { doc, getDoc, setDoc, collection } from 'firebase/firestore'
 import { useAuthState } from 'react-firebase-hooks/auth'
 
 export default function NewRecipe() {
@@ -18,9 +18,9 @@ export default function NewRecipe() {
     function isAlphaNumericWithSpaces(str) {
         return /^[a-zA-Z0-9\s]+$/.test(str);
     }
-    
+
     function isValidUrl(url) {
-        if (validator.isURL(url)) {
+        if ((validator.isURL(url)) && (url.startsWith("https://") || url.startsWith("http://"))) {
             return true
         } else {
             return false
@@ -38,7 +38,7 @@ export default function NewRecipe() {
             return alert('Please enter a title that is alphanumeric')
         }
         else if (!(recipeLink.length === '') && (isValidUrl(recipeLink) === false)) {
-            return alert('Please enter a valid URL')
+            return alert('Please enter a valid URL\nmust start with https:// or http://')
         }
         else if (recipeTitle.length > 35) {
             return alert('Please enter a title that is less than 35 characters')
@@ -46,7 +46,6 @@ export default function NewRecipe() {
 
         const userDocRef = doc(db, 'users', user.uid)
         const recipesRef = collection(userDocRef, 'recipes')
-
         const recipeDocRef = doc(recipesRef, recipeTitle);
 
         getDoc(recipeDocRef).then((doc) => {
@@ -79,7 +78,6 @@ export default function NewRecipe() {
         setRecipeDescription('')
         setRecipeLink('')
     }
-
 
     return (
         <div className='w-auto'>
