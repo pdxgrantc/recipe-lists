@@ -15,29 +15,44 @@ export default function NewRecipe() {
     const [recipeDescription, setRecipeDescription] = useState('')
     const [recipeLink, setRecipeLink] = useState('')
 
+    function isAlphaNumericWithSpaces(str) {
+        return /^[a-zA-Z0-9\s]+$/.test(str);
+    }
+
     const submitToDB = (e) => {
         e.preventDefault()
 
+        // ensure that the title is alphanumeric
         if (recipeTitle === '') {
             return alert('Please enter a title for your recipe')
+        }
+        else if (!isAlphaNumericWithSpaces(recipeTitle)) {
+            return alert('Please enter a title that is alphanumeric')
+        }
+        else if (!(recipeLink.length === '') && (isValidUrl(recipeLink) === false)) {
+            return alert('Please enter a valid URL')
         }
         else if (recipeTitle.length > 35) {
             return alert('Please enter a title that is less than 35 characters')
         }
 
-        if (!recipeLink === '') {
-            if (!validator.isURL(recipeLink)) {
-                return alert('Please enter a valid URL')
+        const URL = require('url-parse');
+
+        function isValidUrl(url) {
+            if (validator.isURL(url)) {
+                return true
+            } else {
+                return false
             }
         }
+
 
         const userDocRef = doc(db, 'users', user.uid)
         const recipesRef = collection(userDocRef, 'recipes')
 
         const recipeDocRef = doc(recipesRef, recipeTitle);
 
-        getDoc(recipeDocRef)
-          .then((doc) => {
+        getDoc(recipeDocRef).then((doc) => {
             if (doc.exists()) {
                 alert('A recipe with that title already exists')
                 setRecipeTitle('')
@@ -56,10 +71,9 @@ export default function NewRecipe() {
                 setRecipeDescription('')
                 setRecipeLink('')
             }
-          })
-          .catch((error) => {
+        }).catch((error) => {
             console.log('Error getting document:', error);
-          });
+        });
     }
 
     const reset = (e) => {

@@ -64,6 +64,9 @@ function Content() {
           if (docSnapshot.exists()) {
             setRecipeData(docSnapshot.data());
           }
+          else {
+            setRecipeData({ title: null });
+          }
         },
         (error) => {
           console.error(error);
@@ -84,16 +87,6 @@ function Content() {
     }
   }
 
-  const openLinkInNewTab = () => {
-    var url = recipeData.link;
-    // check if first part of recipeData.link is 'https://'
-    if ((!recipeData.link.startsWith('https://')) || (!recipeData.link.startsWith('http://'))) {
-      url = 'http://' + url;
-    }
-    const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
-    if (newWindow) newWindow.opener = null
-  }
-
   if (!recipeData) {
     return (
       <>
@@ -103,6 +96,10 @@ function Content() {
         Loading...
       </>
     );
+  }
+  else if (recipeData.title === null) {
+    // route to 404 page
+    window.location.href = '/404';
   }
   else {
     return (
@@ -127,11 +124,12 @@ function Content() {
             </div>
             <div className='flex flex-col gap-1'>
               <h3 className='text-[1.5rem] font-semibold'>{recipeData.description}</h3>
-              <h3
-                className="whitespace-nowrap text-[1.25rem] leading-8 cursor-pointer w-fit border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.5vw] py-[.25rem]"
-                onClick={openLinkInNewTab}>
-                {recipeData.title + " link"}
-              </h3>
+              <a href={recipeData.link} target="_blank" rel="noopener noreferrer">
+                <h3
+                  className="whitespace-nowrap text-[1.25rem] leading-8 cursor-pointer w-fit border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.5vw] py-[.25rem]">
+                  {recipeData.title + " link"}
+                </h3>
+              </a>
             </div>
           </div>
 
