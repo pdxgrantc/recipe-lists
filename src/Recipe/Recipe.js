@@ -125,7 +125,7 @@ function Content() {
                 </div>
               </div>
             </div>
-            <div>
+            <div className='flex flex-col gap-1'>
               <h3 className='text-[1.5rem] font-semibold'>{recipeData.description}</h3>
               <h3
                 className="whitespace-nowrap text-[1.25rem] leading-8 cursor-pointer w-fit border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.5vw] py-[.25rem]"
