@@ -18,6 +18,14 @@ export default function NewRecipe() {
     function isAlphaNumericWithSpaces(str) {
         return /^[a-zA-Z0-9\s]+$/.test(str);
     }
+    
+    function isValidUrl(url) {
+        if (validator.isURL(url)) {
+            return true
+        } else {
+            return false
+        }
+    }
 
     const submitToDB = (e) => {
         e.preventDefault()
@@ -35,17 +43,6 @@ export default function NewRecipe() {
         else if (recipeTitle.length > 35) {
             return alert('Please enter a title that is less than 35 characters')
         }
-
-        const URL = require('url-parse');
-
-        function isValidUrl(url) {
-            if (validator.isURL(url)) {
-                return true
-            } else {
-                return false
-            }
-        }
-
 
         const userDocRef = doc(db, 'users', user.uid)
         const recipesRef = collection(userDocRef, 'recipes')
