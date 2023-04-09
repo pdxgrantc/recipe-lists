@@ -82,7 +82,7 @@ function Content() {
 
       return () => unsubscribe();
     }
-  }, [user]);
+  }, [recipeTitle, user]);
 
   async function deleteRecipe() {
     try {

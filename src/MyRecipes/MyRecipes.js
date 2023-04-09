@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 // Firebase
 import { auth, db } from '../firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { doc, onSnapshot, query, orderBy, collection } from 'firebase/firestore'
+import { onSnapshot, query, orderBy, collection } from 'firebase/firestore'
 
 // Partials
 import Header from '../Static/Header/Header'

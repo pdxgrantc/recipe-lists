@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom'
 
 // Firebase
 import { auth, db } from '../firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { collection, query, orderBy, limit, onSnapshot, doc } from 'firebase/firestore';
+import { collection, query, orderBy, limit, onSnapshot } from 'firebase/firestore';
 
 // Partials
 import NewRecipe from './NewRecipe'
@@ -82,7 +82,7 @@ function RecipesList() {
   const [user] = useAuthState(auth);
   const [recipes, setRecipes] = useState([]);
 
-  const unsubscribe = onSnapshot(
+  onSnapshot(
     query(collection(db, "users", user.uid, "recipes"), orderBy("lastEditedAt", "desc"), limit(5)),
     (snapshot) => {
       const recipes = snapshot.docs.map((doc) => ({
