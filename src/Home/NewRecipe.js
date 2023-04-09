@@ -92,13 +92,13 @@ export default function NewRecipe() {
                     />
                     <input className="rounded-[4px] text-black w-[50vw] h-[5vh] text-[1.5rem] border-[1.5px] border-black focus:outline-none px-2"
                         type='text'
-                        placeholder='Recipe Description'
+                        placeholder='Recipe Description (optional)'
                         value={recipeDescription}
                         onChange={(e) => setRecipeDescription(e.target.value)}
                     />
                     <input className="rounded-[4px] text-black w-[50vw] h-[5vh] text-[1.5rem] border-[1.5px] border-black focus:outline-none px-2"
                         type='text'
-                        placeholder='Recipe Link'
+                        placeholder='Recipe Link (optional)'
                         value={recipeLink}
                         onChange={(e) => setRecipeLink(e.target.value)}
                     />

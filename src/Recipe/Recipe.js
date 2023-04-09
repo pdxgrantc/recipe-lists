@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 // Firebase
 import { auth, db } from '../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { doc, getDoc, onSnapshot, deleteDoc } from 'firebase/firestore';
+import { doc, onSnapshot, deleteDoc } from 'firebase/firestore';
 
 // Partials
 import Header from '../Static/Header/Header';
@@ -13,6 +13,8 @@ import SignedOut from '../Static/SignedOut';
 
 // SVGs
 import { BiEditAlt as Pencil } from 'react-icons/bi';
+import { BiSave as Save } from 'react-icons/bi';
+import { ImCancelCircle as Cancel } from 'react-icons/im';
 import { ReactComponent as Trashcan } from '../Static/SVG/Trashcan.svg';
 
 export default function Recipe() {
@@ -52,8 +54,13 @@ export default function Recipe() {
 function Content() {
   const [user] = useAuthState(auth);
   const [recipeData, setRecipeData] = useState();
+  const [editBool, setBoolEdit] = useState(false);
   const rawRecipeTitle = window.location.pathname.split('/')[2];
   var recipeTitle = rawRecipeTitle.replace(/%20/g, ' ');
+
+  // edit values
+  const [editTitle, setEditTitle] = useState();
+  const [editDescription, setEditDescription] = useState();
 
   useEffect(() => {
     if (user) {
@@ -102,116 +109,229 @@ function Content() {
     window.location.href = '/404';
   }
   else {
-    return (
-      <>
-        <Helmet>
-          <title>{recipeData.title}</title>
-        </Helmet>
-        <div className='flex flex-col gap-7'>
-          <div className='flex flex-col gap-3 w-full'>
-            <div className='flex justify-between gap-5 on_desktop:w-[90%]'>
-              <h2 className='text-[2.75rem] font-semibold whitespace-nowrap'>{recipeData.title}</h2>
-              <div className='flex my-auto'>
-                <div className='flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem]'>
-                  <Pencil className='w-[2.25rem] h-[2.25rem]' />
-                  <h4 className='text-2xl font-semibold'>Edit</h4>
-                </div>
-                <div onClick={deleteRecipe} className='flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem]'>
-                  <Trashcan className='w-[2.25rem] h-[2.25rem]' />
-                  <h4 className='text-2xl font-semibold'>Delete</h4>
+    if (!editBool) {
+      return (
+        <>
+          <Helmet>
+            <title>{recipeData.title}</title>
+          </Helmet>
+          <div className='flex flex-col gap-7 pl-3'>
+            <div className='flex flex-col gap-3 w-full'>
+              <div className='flex justify-between gap-5 on_desktop:w-[90%]'>
+                <h2 className='text-[2.75rem] font-semibold pr-12 whitespace-nowrap w-full'>{recipeData.title}</h2>
+                <div className='flex my-auto'>
+                  <button onClick={() => setBoolEdit(!editBool)} className='flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem]'>
+                    <Pencil className='w-[2.25rem] h-[2.25rem]' />
+                    <h4 className='text-2xl font-semibold'>Edit</h4>
+                  </button>
+                  <button onClick={deleteRecipe} className='flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem]'>
+                    <Trashcan className='w-[2.25rem] h-[2.25rem]' />
+                    <h4 className='text-2xl font-semibold'>Delete</h4>
+                  </button>
                 </div>
               </div>
+              <div className='flex flex-col gap-1'>
+                <h3 className='text-[1.5rem] font-semibold'>{recipeData.description}</h3>
+                <a href={recipeData.link} target="_blank" rel="noopener noreferrer">
+                  <h3
+                    className="whitespace-nowrap text-[1.25rem] leading-8 cursor-pointer w-fit border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.5vw] py-[.25rem]">
+                    {recipeData.title + " link"}
+                  </h3>
+                </a>
+              </div>
             </div>
-            <div className='flex flex-col gap-1'>
-              <h3 className='text-[1.5rem] font-semibold'>{recipeData.description}</h3>
-              <a href={recipeData.link} target="_blank" rel="noopener noreferrer">
-                <h3
-                  className="whitespace-nowrap text-[1.25rem] leading-8 cursor-pointer w-fit border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.5vw] py-[.25rem]">
-                  {recipeData.title + " link"}
-                </h3>
-              </a>
+            <div>
+              <div>
+                <h4 className='text-[1.75rem] font-semibold'>Ingredients</h4>
+                <div className='pl-[1.5rem]'>
+                  {(recipeData.ingredients.length === 0) ?
+                    <div>
+                      <p className='text-[1.25rem]'>
+                        No ingredients.
+                      </p>
+                    </div>
+                    :
+                    <>
+                      {recipeData.ingredients.map((ingredient, index) => {
+                        return (
+                          <div key={index}>
+                            <p className='text-[1.25rem]'>
+                              {index + 1}.&nbsp;&nbsp;
+                              {ingredient}
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </>
+                  }
+                </div>
+              </div>
+              <div>
+                <h4 className='text-[1.75rem] font-semibold'>Steps</h4>
+                <div className='pl-[1.5rem]'>
+                  {(recipeData.steps.length === 0) ?
+                    <div>
+                      <p className='text-[1.25rem]'>
+                        No steps.
+                      </p>
+                    </div>
+                    :
+                    <>
+                      {recipeData.steps.map((ingredient, index) => {
+                        return (
+                          <div key={index}>
+                            <p className='text-[1.25rem]'>
+                              {index + 1}.&nbsp;&nbsp;
+                              {ingredient}
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </>
+                  }
+                </div>
+              </div>
+              <div>
+                <h4 className='text-[1.75rem] font-semibold'>Notes</h4>
+                <div className='pl-[1.5rem]'>
+                  {(recipeData.notes.length === 0) ?
+                    <div>
+                      <p className='text-[1.25rem]'>
+                        No notes.
+                      </p>
+                    </div>
+                    :
+                    <>
+                      {recipeData.notes.map((ingredient, index) => {
+                        return (
+                          <div key={index}>
+                            <p className='text-[1.25rem]'>
+                              {index + 1}.&nbsp;&nbsp;
+                              {ingredient}
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </>
+                  }
+                </div>
+              </div>
             </div>
           </div>
-
-          <div>
-            <div>
-              <h4 className='text-[1.75rem] font-semibold'>Ingredients</h4>
-              <div className='pl-[1.5rem]'>
-                {(recipeData.ingredients.length === 0) ?
-                  <div>
-                    <p className='text-[1.25rem]'>
-                      No ingredients.
-                    </p>
-                  </div>
-                  :
-                  <>
-                    {recipeData.ingredients.map((ingredient, index) => {
-                      return (
-                        <div key={index}>
-                          <p className='text-[1.25rem]'>
-                            {index + 1}.&nbsp;&nbsp;
-                            {ingredient}
-                          </p>
-                        </div>
-                      );
-                    })}
-                  </>
-                }
+        </>
+      )
+    }
+    else {
+      return (
+        <>
+          <Helmet>
+            <title>{recipeData.title}</title>
+          </Helmet>
+          <div className='flex flex-col gap-7'>
+            <div className='flex flex-col gap-3 w-full'>
+              <div className='flex justify-between gap-5 on_desktop:w-full'>
+                <input className='font-semibold rounded-[4px] px-3 text-[2.75rem] h-auto w-full outline-none text-black' type="text" value={recipeData.title} onChange={(e) => setRecipeData({ ...recipeData, title: e.target.value })} />
+                <div className='flex my-auto'>
+                  <button onClick={() => setBoolEdit(!editBool)} className='flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem]'>
+                    <Cancel className='w-[2.25rem] h-[2.25rem]' />
+                    <h4 className='text-2xl font-semibold'>Cancel</h4>
+                  </button>
+                  <button className='flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem]'>
+                    <Save className='w-[2.25rem] h-[2.25rem]' />
+                    <h4 className='text-2xl font-semibold'>Save</h4>
+                  </button>
+                </div>
+              </div>
+              <div className='flex flex-col gap-1'>
+                <h3 className='text-[1.5rem] font-semibold'>{recipeData.description}</h3>
+                <a href={recipeData.link} target="_blank" rel="noopener noreferrer">
+                  <h3
+                    className="whitespace-nowrap text-[1.25rem] leading-8 cursor-pointer w-fit border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.5vw] py-[.25rem]">
+                    {recipeData.title + " link"}
+                  </h3>
+                </a>
               </div>
             </div>
             <div>
-              <h4 className='text-[1.75rem] font-semibold'>Steps</h4>
-              <div className='pl-[1.5rem]'>
-                {(recipeData.steps.length === 0) ?
-                  <div>
-                    <p className='text-[1.25rem]'>
-                      No steps.
-                    </p>
-                  </div>
-                  :
-                  <>
-                    {recipeData.steps.map((ingredient, index) => {
-                      return (
-                        <div key={index}>
-                          <p className='text-[1.25rem]'>
-                            {index + 1}.&nbsp;&nbsp;
-                            {ingredient}
-                          </p>
-                        </div>
-                      );
-                    })}
-                  </>
-                }
+              <div>
+                <h4 className='text-[1.75rem] font-semibold'>Ingredients</h4>
+                <div className='pl-[1.5rem]'>
+                  {(recipeData.ingredients.length === 0) ?
+                    <div>
+                      <p className='text-[1.25rem]'>
+                        No ingredients.
+                      </p>
+                    </div>
+                    :
+                    <>
+                      {recipeData.ingredients.map((ingredient, index) => {
+                        return (
+                          <div key={index}>
+                            <p className='text-[1.25rem]'>
+                              {index + 1}.&nbsp;&nbsp;
+                              {ingredient}
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </>
+                  }
+                </div>
               </div>
-            </div>
-            <div>
-              <h4 className='text-[1.75rem] font-semibold'>Notes</h4>
-              <div className='pl-[1.5rem]'>
-                {(recipeData.notes.length === 0) ?
-                  <div>
-                    <p className='text-[1.25rem]'>
-                      No notes.
-                    </p>
-                  </div>
-                  :
-                  <>
-                    {recipeData.notes.map((ingredient, index) => {
-                      return (
-                        <div key={index}>
-                          <p className='text-[1.25rem]'>
-                            {index + 1}.&nbsp;&nbsp;
-                            {ingredient}
-                          </p>
-                        </div>
-                      );
-                    })}
-                  </>
-                }
+              <div>
+                <h4 className='text-[1.75rem] font-semibold'>Steps</h4>
+                <div className='pl-[1.5rem]'>
+                  {(recipeData.steps.length === 0) ?
+                    <div>
+                      <p className='text-[1.25rem]'>
+                        No steps.
+                      </p>
+                    </div>
+                    :
+                    <>
+                      {recipeData.steps.map((ingredient, index) => {
+                        return (
+                          <div key={index}>
+                            <p className='text-[1.25rem]'>
+                              {index + 1}.&nbsp;&nbsp;
+                              {ingredient}
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </>
+                  }
+                </div>
+              </div>
+              <div>
+                <h4 className='text-[1.75rem] font-semibold'>Notes</h4>
+                <div className='pl-[1.5rem]'>
+                  {(recipeData.notes.length === 0) ?
+                    <div>
+                      <p className='text-[1.25rem]'>
+                        No notes.
+                      </p>
+                    </div>
+                    :
+                    <>
+                      {recipeData.notes.map((ingredient, index) => {
+                        return (
+                          <div key={index}>
+                            <p className='text-[1.25rem]'>
+                              {index + 1}.&nbsp;&nbsp;
+                              {ingredient}
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </>
+                  }
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </>
-    )
+        </>
+      )
+    }
   }
 }
