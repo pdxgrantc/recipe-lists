@@ -18,6 +18,7 @@ import { BiSave as Save } from 'react-icons/bi';
 import { ImCancelCircle as Cancel } from 'react-icons/im';
 import { ReactComponent as Trashcan } from '../Static/SVG/Trashcan.svg';
 
+
 export default function Recipe() {
   const [user] = useAuthState(auth);
 
@@ -93,8 +94,6 @@ function Content() {
       return;
     }
   }
-
-
 
   function doDelete() {
     // delete document at path 'users/{user.uid}/recipes/{recipeTitle}'

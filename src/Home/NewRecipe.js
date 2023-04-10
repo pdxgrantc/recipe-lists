@@ -8,9 +8,9 @@ import { auth, db } from '../firebase'
 import { doc, getDoc, setDoc, collection } from 'firebase/firestore'
 import { useAuthState } from 'react-firebase-hooks/auth'
 
+
 export default function NewRecipe() {
     const [user] = useAuthState(auth)
-
     const [recipeTitle, setRecipeTitle] = useState('')
     const [recipeDescription, setRecipeDescription] = useState('')
     const [recipeLink, setRecipeLink] = useState('')
