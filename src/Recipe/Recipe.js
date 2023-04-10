@@ -192,7 +192,7 @@ function Content() {
                   </button>
                 </div>
               </div>
-              <div className='flex flex-col gap-1'>
+              <div className='flex flex-col gap-[.6rem]'>
                 <h3 className='text-[1.5rem] font-semibold'>{recipeData.description}</h3>
                 <a href={recipeData.link} target="_blank" rel="noopener noreferrer">
                   <h3
@@ -290,10 +290,10 @@ function Content() {
             <title>{recipeData.title}</title>
           </Helmet>
           <div className='pl-3 flex flex-col gap-7 w-full'>
-            <div className='flex flex-col gap-3 w-full'>
+            <div className='flex flex-col gap-3 w-full pb-[4px]'>
               <div className='flex justify-between gap-5 w-full'>
                 <input type='text' value={editTitle} onChange={(e) => setEditTitle(e.target.value)} className='font-semibold rounded-[4px] px-3 text-[2.75rem] h-auto w-[48rem] outline-none text-black' />
-                <div className='flex my-auto'>
+                <div className='flex my-auto pr-[2rem]'>
                   <button onClick={() => setBoolEdit(!editBool)} className='flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem]'>
                     <Cancel className='w-[2.25rem] h-[2.25rem]' />
                     <h4 className='text-2xl font-semibold'>Cancel</h4>
@@ -304,9 +304,9 @@ function Content() {
                   </button>
                 </div>
               </div>
-              <div className='flex flex-col gap-1'>
+              <div className='flex flex-col gap-[.8rem]'>
                 <input className='font-semibold rounded-[4px] px-3 text-[1.5rem] h-auto w-full outline-none text-black' type="text" value={editDescription} onChange={(e) => setEditDescription(e.target.value)} />
-                <input className='font-semibold rounded-[4px] px-3 text-[1.25rem] h-auto w-auto outline-none text-black' type="text" value={editLink} onChange={(e) => setEditLink(e.target.value)} />
+                <input className='font-semibold rounded-[4px] px-3 text-[1.25rem] h-auto w-auto outline-none text-black border-b-[1.5px] leading-8 py-[.0.75rem]' type="text" value={editLink} onChange={(e) => setEditLink(e.target.value)} />
               </div>
             </div>
             <div className='px-3'>
