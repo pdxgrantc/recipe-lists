@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import { confirmAlert } from 'react-confirm-alert';
 
 // Firebase
 import { auth, db } from '../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { doc, onSnapshot, deleteDoc } from 'firebase/firestore';
+import { doc, onSnapshot, deleteDoc, updateDoc } from 'firebase/firestore';
 
 // Partials
 import Header from '../Static/Header/Header';
@@ -63,6 +62,7 @@ function Content() {
   // edit values
   const [editTitle, setEditTitle] = useState();
   const [editDescription, setEditDescription] = useState();
+  const [editLink, setEditLink] = useState();
 
   useEffect(() => {
     if (user) {
@@ -72,6 +72,9 @@ function Content() {
         (docSnapshot) => {
           if (docSnapshot.exists()) {
             setRecipeData(docSnapshot.data());
+            setEditTitle(docSnapshot.data().title);
+            setEditDescription(docSnapshot.data().description);
+            setEditLink(docSnapshot.data().link);
           }
           else {
             setRecipeData({ title: null });
@@ -101,6 +104,18 @@ function Content() {
     deleteDoc(recipeDocRef)
     // route to home page
     window.location.href = '/';
+  }
+
+  function saveEdit() {
+    // update document at path 'users/{user.uid}/recipes/{recipeTitle}'
+    const recipeDocRef = doc(db, 'users', user.uid, 'recipes', recipeTitle);
+    updateDoc(recipeDocRef, {
+      title: editTitle,
+      description: editDescription,
+      link: editLink,
+    })
+    // set edit bool to false
+    setBoolEdit(!editBool);
   }
 
   if (!recipeData) {
@@ -239,26 +254,21 @@ function Content() {
           <div className='pl-3 flex flex-col gap-7'>
             <div className='flex flex-col gap-3 w-full'>
               <div className='flex justify-between gap-5 on_desktop:w-full'>
-                <input className='font-semibold rounded-[4px] px-3 text-[2.75rem] h-auto w-full outline-none text-black' type="text" value={recipeData.title} onChange={(e) => setRecipeData({ ...recipeData, title: e.target.value })} />
+                <input type='text' value={editTitle} onChange={(e) => setEditTitle(e.target.value)} className='text-[2.75rem] font-semibold pr-12 whitespace-nowrap w-full' />
                 <div className='flex my-auto'>
                   <button onClick={() => setBoolEdit(!editBool)} className='flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem]'>
                     <Cancel className='w-[2.25rem] h-[2.25rem]' />
                     <h4 className='text-2xl font-semibold'>Cancel</h4>
                   </button>
-                  <button className='flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem]'>
+                  <button onClick={saveEdit} className='flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem]'>
                     <Save className='w-[2.25rem] h-[2.25rem]' />
                     <h4 className='text-2xl font-semibold'>Save</h4>
                   </button>
                 </div>
               </div>
               <div className='flex flex-col gap-1'>
-                <h3 className='text-[1.5rem] font-semibold'>{recipeData.description}</h3>
-                <a href={recipeData.link} target="_blank" rel="noopener noreferrer">
-                  <h3
-                    className="whitespace-nowrap text-[1.25rem] leading-8 cursor-pointer w-fit border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.5vw] py-[.25rem]">
-                    {recipeData.title + " link"}
-                  </h3>
-                </a>
+                <input className='font-semibold rounded-[4px] px-3 text-[1.5rem] h-auto w-full outline-none text-black' type="text" value={recipeData.description} onChange={(e) => setRecipeData({ ...recipeData, description: e.target.value })} />
+                <input className='font-semibold rounded-[4px] px-3 text-[1.25rem] h-auto w-auto outline-none text-black' type="text" value={recipeData.link} onChange={(e) => setRecipeData({ ...recipeData, link: e.target.value })} />
               </div>
             </div>
             <div>
