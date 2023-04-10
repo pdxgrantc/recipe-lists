@@ -40,8 +40,8 @@ export default function Recipe() {
     return (
       <div className="bg-main_bg_color text-text_white h-[100vh] flex flex-col">
         <Header />
-        <div className="w-full h-max basis-auto grow">
-          <div className='m-auto rounded-[10px] h-[80%] bg-black w-[90%]'>
+        <div className="w-full min-h-max h-auto basis-auto grow">
+          <div className='m-auto rounded-[10px] min-h-[80%] bg-black w-[90%]'>
             <div className='flex gap-20 w-full px-[4%] py-[3%] mx-auto'>
               <Content />
             </div>
