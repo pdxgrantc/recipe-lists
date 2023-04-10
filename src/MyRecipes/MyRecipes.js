@@ -115,7 +115,7 @@ function Content() {
                                 className="w-full rounded-[4px] p-3 border-[2px] border-text_white hover:bg-apps_bg_pressed hover:border-transparent"
                                 to={"/My-Recipes/" + recipe.title}>
                                 <h4 className='whitespace-nowrap text-[1.6rem]'>{recipe.title}</h4>
-                                <h5>{recipesData.description}</h5>
+                                <h5>{recipe.description}</h5>
                             </Link>
                         ))}
                     </div>
