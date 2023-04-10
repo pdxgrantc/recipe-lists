@@ -227,7 +227,7 @@ function Content() {
           <Helmet>
             <title>{recipeData.title}</title>
           </Helmet>
-          <div className='flex flex-col gap-7'>
+          <div className='pl-3 flex flex-col gap-7'>
             <div className='flex flex-col gap-3 w-full'>
               <div className='flex justify-between gap-5 on_desktop:w-full'>
                 <input className='font-semibold rounded-[4px] px-3 text-[2.75rem] h-auto w-full outline-none text-black' type="text" value={recipeData.title} onChange={(e) => setRecipeData({ ...recipeData, title: e.target.value })} />
