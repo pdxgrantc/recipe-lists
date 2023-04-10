@@ -140,6 +140,7 @@ function Content() {
       title: editTitle,
       description: editDescription,
       link: editLink,
+      lastEditedAt: new Date(),
     })
     // set edit bool to false
     setBoolEdit(!editBool);
@@ -149,11 +150,6 @@ function Content() {
     setEditTitle(recipeData.title);
     setEditDescription(recipeData.description);
     setEditLink(recipeData.link);
-  }
-
-  function toggleEdit() {
-    setToDefault();
-    setBoolEdit(!editBool);
   }
 
   if (!recipeData) {
