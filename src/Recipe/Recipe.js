@@ -309,7 +309,7 @@ function Content() {
                 <input className='font-semibold rounded-[4px] px-3 text-[1.25rem] h-auto w-auto outline-none text-black' type="text" value={editLink} onChange={(e) => setEditLink(e.target.value)} />
               </div>
             </div>
-            <div>
+            <div className='px-3'>
               <div>
                 <h4 className='text-[1.75rem] font-semibold'>Ingredients</h4>
                 <div className='pl-[1.5rem]'>
