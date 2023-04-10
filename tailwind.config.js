@@ -15,6 +15,7 @@ module.exports = {
       text_grey: '#b1b1b1',
       button_pressed_color: '#475266',
       button_accent_color: '#5121e5',
+      input_text_color: '#b6b6b6',
       apps_bg_color: '#1f1f2b',
       apps_bg_pressed: '#3a3a45',
       text_blue: "#609bff",

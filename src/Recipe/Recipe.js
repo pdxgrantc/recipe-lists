@@ -42,7 +42,7 @@ export default function Recipe() {
         <Header />
         <div className="w-full h-max basis-auto grow">
           <div className='m-auto rounded-[10px] h-[80%] bg-black w-[90%]'>
-            <div className='flex gap-20 w-full px-[4%] py-[3%]'>
+            <div className='flex gap-20 w-full px-[4%] py-[3%] mx-auto'>
               <Content />
             </div>
           </div>
@@ -177,9 +177,9 @@ function Content() {
           <Helmet>
             <title>{recipeData.title}</title>
           </Helmet>
-          <div className='flex flex-col gap-7 pl-3'>
+          <div className='flex flex-col gap-7 w-full px-6'>
             <div className='flex flex-col gap-3 w-full'>
-              <div className='flex justify-between gap-5 on_desktop:w-[90%]'>
+              <div className='flex justify-between gap-5'>
                 <h2 className='text-[2.75rem] font-semibold pr-12 whitespace-nowrap w-full'>{recipeData.title}</h2>
                 <div className='flex my-auto'>
                   <button onClick={() => setBoolEdit(!editBool)} className='flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem]'>
@@ -289,10 +289,10 @@ function Content() {
           <Helmet>
             <title>{recipeData.title}</title>
           </Helmet>
-          <div className='pl-3 flex flex-col gap-7'>
+          <div className='pl-3 flex flex-col gap-7 w-full'>
             <div className='flex flex-col gap-3 w-full'>
-              <div className='flex justify-between gap-5 on_desktop:w-full'>
-                <input type='text' value={editTitle} onChange={(e) => setEditTitle(e.target.value)} className='text-[2.75rem] font-semibold pr-12 whitespace-nowrap w-full' />
+              <div className='flex justify-between gap-5 w-full'>
+                <input type='text' value={editTitle} onChange={(e) => setEditTitle(e.target.value)} className='font-semibold rounded-[4px] px-3 text-[2.75rem] h-auto w-[48rem] outline-none text-black' />
                 <div className='flex my-auto'>
                   <button onClick={() => setBoolEdit(!editBool)} className='flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem]'>
                     <Cancel className='w-[2.25rem] h-[2.25rem]' />
