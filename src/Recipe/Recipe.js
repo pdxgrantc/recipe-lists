@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
+import validator from 'validator';
 
 // Firebase
 import { auth, db } from '../firebase';
@@ -106,15 +107,52 @@ function Content() {
     window.location.href = '/';
   }
 
+  function isValidUrl(url) {
+    if ((validator.isURL(url)) && (url.startsWith("https://") || url.startsWith("http://"))) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  function isAlphaNumericWithSpaces(str) {
+    return /^[a-zA-Z0-9\s]+$/.test(str);
+  }
+
   function saveEdit() {
+    if (editTitle === '') {
+      return alert('Please enter a title for your recipe')
+    }
+    if (!isAlphaNumericWithSpaces(editTitle)) {
+      return alert('Please enter a title that is alphanumeric')
+    }
+    if (editTitle.length > 35) {
+      return alert('Please enter a title that is less than 35 characters')
+    }
     // update document at path 'users/{user.uid}/recipes/{recipeTitle}'
-    const recipeDocRef = doc(db, 'users', user.uid, 'recipes', recipeTitle);
+    const recipeDocRef = doc(db, 'users', user.uid, 'recipes', editTitle);
+    if ((editLink.length !== 0)) {
+      if (isValidUrl(editLink) === false) {
+        return alert('Please enter a valid URL\nmust start with https:// or http://')
+      }
+    }
     updateDoc(recipeDocRef, {
       title: editTitle,
       description: editDescription,
       link: editLink,
     })
     // set edit bool to false
+    setBoolEdit(!editBool);
+  }
+
+  function setToDefault() {
+    setEditTitle(recipeData.title);
+    setEditDescription(recipeData.description);
+    setEditLink(recipeData.link);
+  }
+
+  function toggleEdit() {
+    setToDefault();
     setBoolEdit(!editBool);
   }
 
@@ -267,8 +305,8 @@ function Content() {
                 </div>
               </div>
               <div className='flex flex-col gap-1'>
-                <input className='font-semibold rounded-[4px] px-3 text-[1.5rem] h-auto w-full outline-none text-black' type="text" value={recipeData.description} onChange={(e) => setRecipeData({ ...recipeData, description: e.target.value })} />
-                <input className='font-semibold rounded-[4px] px-3 text-[1.25rem] h-auto w-auto outline-none text-black' type="text" value={recipeData.link} onChange={(e) => setRecipeData({ ...recipeData, link: e.target.value })} />
+                <input className='font-semibold rounded-[4px] px-3 text-[1.5rem] h-auto w-full outline-none text-black' type="text" value={editDescription} onChange={(e) => setEditDescription(e.target.value)} />
+                <input className='font-semibold rounded-[4px] px-3 text-[1.25rem] h-auto w-auto outline-none text-black' type="text" value={editLink} onChange={(e) => setEditLink(e.target.value)} />
               </div>
             </div>
             <div>
