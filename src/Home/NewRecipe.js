@@ -34,11 +34,13 @@ export default function NewRecipe() {
         if (recipeTitle === '') {
             return alert('Please enter a title for your recipe')
         }
-        else if (!isAlphaNumericWithSpaces(recipeTitle)) {
+        if (!isAlphaNumericWithSpaces(recipeTitle)) {
             return alert('Please enter a title that is alphanumeric')
         }
-        else if (!(recipeLink.length === '') && (isValidUrl(recipeLink) === false)) {
-            return alert('Please enter a valid URL\nmust start with https:// or http://')
+        if ((recipeLink.length !== 0)) {
+            if (isValidUrl(recipeLink) === false) {
+                return alert('Please enter a valid URL\nmust start with https:// or http://')
+            }
         }
         else if (recipeTitle.length > 35) {
             return alert('Please enter a title that is less than 35 characters')

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
+import { confirmAlert } from 'react-confirm-alert';
 
 // Firebase
 import { auth, db } from '../firebase';
@@ -84,14 +85,23 @@ function Content() {
     }
   }, [recipeTitle, user]);
 
-  async function deleteRecipe() {
-    try {
-      await deleteDoc(doc(db, "users", user.uid, 'recipes', recipeTitle));
-      // redirect to home page
-      window.location.href = '/';
-    } catch (error) {
-      console.error(`Error deleting recipe with ID ${recipeTitle}:`, error);
+  function confirmDelete() {
+    let text = "Are you sure you want to delete this recipe.\nPress either OK or Cancel.";
+    if (window.confirm(text) == true) {
+      doDelete();
+    } else {
+      return;
     }
+  }
+
+
+
+  function doDelete() {
+    // delete document at path 'users/{user.uid}/recipes/{recipeTitle}'
+    const recipeDocRef = doc(db, 'users', user.uid, 'recipes', recipeTitle);
+    deleteDoc(recipeDocRef)
+    // route to home page
+    window.location.href = '/';
   }
 
   if (!recipeData) {
@@ -124,7 +134,7 @@ function Content() {
                     <Pencil className='w-[2.25rem] h-[2.25rem]' />
                     <h4 className='text-2xl font-semibold'>Edit</h4>
                   </button>
-                  <button onClick={deleteRecipe} className='flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem]'>
+                  <button onClick={confirmDelete} className='flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem]'>
                     <Trashcan className='w-[2.25rem] h-[2.25rem]' />
                     <h4 className='text-2xl font-semibold'>Delete</h4>
                   </button>
