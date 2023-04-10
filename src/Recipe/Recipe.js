@@ -370,18 +370,36 @@ function Content() {
                       </p>
                     </div>
                     :
-                    <>
-                      {recipeData.notes.map((ingredient, index) => {
-                        return (
-                          <div key={index}>
-                            <p className='text-[1.25rem]'>
-                              {index + 1}.&nbsp;&nbsp;
-                              {ingredient}
-                            </p>
-                          </div>
-                        );
-                      })}
-                    </>
+                    <div className='flex flex-col'>
+                      <div>
+                        {recipeData.notes.map((ingredient, index) => {
+                          return (
+                            <div key={index}>
+                              <p className='text-[1.25rem]'>
+                                {index + 1}.&nbsp;&nbsp;
+                                {ingredient}
+                              </p>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <div className='flex gap-5'>
+                        <div className='flex gap-3 my-auto'>
+                          <input
+                            className='font-semibold rounded-[4px] px-3 text-[1.25rem] h-fit w-auto outline-none text-black'
+                            placeholder='Amount'>
+                          </input>
+                          <input
+                            className='font-semibold rounded-[4px] px-3 text-[1.25rem] h-fit w-auto outline-none text-black'
+                            placeholder='Item Name'>
+                          </input>
+                        </div>
+                        <button
+                          className="mb-[.1rem] whitespace-nowrap text-[1rem] leading-8 cursor-pointer w-fit border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.5vw] py-[.25rem]">
+                          <h4 className='text-2xl font-semibold'>Add</h4>
+                        </button>
+                      </div>
+                    </div>
                   }
                 </div>
               </div>

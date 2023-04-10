@@ -116,7 +116,6 @@ function RecipesList() {
               ))
               }
             </div>
-
           </div>
           <div className='h-6'></div>
           <Link to="/My-Recipes"
