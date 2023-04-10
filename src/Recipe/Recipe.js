@@ -306,7 +306,7 @@ function Content() {
               </div>
               <div className='flex flex-col gap-[.8rem]'>
                 <input className='font-semibold rounded-[4px] px-3 text-[1.5rem] h-auto w-full outline-none text-black' type="text" value={editDescription} onChange={(e) => setEditDescription(e.target.value)} />
-                <input className='font-semibold rounded-[4px] px-3 text-[1.25rem] h-auto w-auto outline-none text-black border-b-[1.5px] leading-8 py-[.0.75rem]' type="text" value={editLink} onChange={(e) => setEditLink(e.target.value)} />
+                <input className='font-semibold rounded-[4px] px-3 text-[1.25rem] h-auto w-auto outline-none text-black border-b-[1.5px] leading-8 py-[0]' type="text" value={editLink} onChange={(e) => setEditLink(e.target.value)} />
               </div>
             </div>
             <div className='px-3'>

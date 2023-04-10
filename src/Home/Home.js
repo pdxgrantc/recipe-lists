@@ -75,9 +75,6 @@ function SideBar() {
   )
 }
 
-// assuming you have already initialized Firebase using the Firebase app
-
-
 function RecipesList() {
   const [user] = useAuthState(auth);
   const [recipes, setRecipes] = useState([]);
@@ -90,7 +87,6 @@ function RecipesList() {
         ...doc.data(),
       }));
       setRecipes(recipes);
-      // Do something with the recipes array
     }
   );
 
