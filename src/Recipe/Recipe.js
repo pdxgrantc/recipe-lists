@@ -5,7 +5,7 @@ import validator from 'validator';
 // Firebase
 import { auth, db } from '../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { doc, onSnapshot, deleteDoc, updateDoc } from 'firebase/firestore';
+import { doc, onSnapshot, deleteDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 
 // Partials
 import Header from '../Static/Header/Header';
@@ -15,6 +15,7 @@ import SignedOut from '../Static/SignedOut';
 // SVGs
 import { BiEditAlt as Pencil } from 'react-icons/bi';
 import { BiSave as Save } from 'react-icons/bi';
+import { HiTrash as Trash } from 'react-icons/hi';
 import { ImCancelCircle as Cancel } from 'react-icons/im';
 import { ReactComponent as Trashcan } from '../Static/SVG/Trashcan.svg';
 
@@ -64,6 +65,9 @@ function Content() {
   const [editTitle, setEditTitle] = useState();
   const [editDescription, setEditDescription] = useState();
   const [editLink, setEditLink] = useState();
+  const [editIngredients, setEditIngredients] = useState([]);
+  const [editInstructions, setEditInstructions] = useState([]);
+  const [editNotes, setAddNotes] = useState([]);
 
   useEffect(() => {
     if (user) {
@@ -76,6 +80,8 @@ function Content() {
             setEditTitle(docSnapshot.data().title);
             setEditDescription(docSnapshot.data().description);
             setEditLink(docSnapshot.data().link);
+            setEditIngredients(docSnapshot.data().ingredients);
+            setEditInstructions(docSnapshot.data().instructions);
           }
           else {
             setRecipeData({ title: null });
@@ -92,7 +98,7 @@ function Content() {
 
   function confirmDelete() {
     let text = "Are you sure you want to delete this recipe.\nPress either OK or Cancel.";
-    if (window.confirm(text) == true) {
+    if (window.confirm(text) === true) {
       doDelete();
     } else {
       return;
@@ -146,10 +152,25 @@ function Content() {
     setBoolEdit(!editBool);
   }
 
-  function setToDefault() {
-    setEditTitle(recipeData.title);
-    setEditDescription(recipeData.description);
-    setEditLink(recipeData.link);
+  const addNote = () => {
+    if (editNotes === '') {
+      return alert('Your note cannot be empty.')
+    }
+    else {
+      const recipeDocRef = doc(db, 'users', user.uid, 'recipes', recipeTitle);
+      const newNotes = [...recipeData.notes, editNotes];
+      updateDoc(recipeDocRef, {
+        notes: newNotes,
+      });
+      setAddNotes('');
+    }
+  }
+
+  const deleteNote = async (index) => {
+    const recipeDocRef = doc(db, 'users', user.uid, 'recipes', recipeTitle);
+    updateDoc(recipeDocRef, {
+      notes: arrayRemove(recipeData.notes[index]),
+    })
   }
 
   if (!recipeData) {
@@ -288,21 +309,37 @@ function Content() {
           <div className='pl-3 flex flex-col gap-7 w-full'>
             <div className='flex flex-col gap-3 w-full pb-[4px]'>
               <div className='flex justify-between gap-5 w-full'>
-                <input type='text' value={editTitle} onChange={(e) => setEditTitle(e.target.value)} className='font-semibold rounded-[4px] px-3 text-[2.75rem] h-auto w-[48rem] outline-none text-black' />
+                <input
+                  type='text'
+                  value={editTitle}
+                  onChange={(e) => setEditTitle(e.target.value)}
+                  className='font-semibold rounded-[4px] px-3 text-[2.75rem] h-auto w-[48rem] outline-none text-black' />
                 <div className='flex my-auto pr-[2rem]'>
-                  <button onClick={() => setBoolEdit(!editBool)} className='flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem]'>
+                  <button
+                    onClick={() => setBoolEdit(!editBool)}
+                    className='flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem]'>
                     <Cancel className='w-[2.25rem] h-[2.25rem]' />
-                    <h4 className='text-2xl font-semibold'>Cancel</h4>
+                    <h4 className='text-2xl font-semibold'>Close</h4>
                   </button>
-                  <button onClick={saveEdit} className='flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem]'>
+                  <button
+                    onClick={saveEdit}
+                    className='flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem]'>
                     <Save className='w-[2.25rem] h-[2.25rem]' />
                     <h4 className='text-2xl font-semibold'>Save</h4>
                   </button>
                 </div>
               </div>
               <div className='flex flex-col gap-[.8rem]'>
-                <input className='font-semibold rounded-[4px] px-3 text-[1.5rem] h-auto w-full outline-none text-black' type="text" value={editDescription} onChange={(e) => setEditDescription(e.target.value)} />
-                <input className='font-semibold rounded-[4px] px-3 text-[1.25rem] h-auto w-auto outline-none text-black border-b-[1.5px] leading-8 py-[0]' type="text" value={editLink} onChange={(e) => setEditLink(e.target.value)} />
+                <input
+                  type="text"
+                  value={editDescription}
+                  onChange={(e) => setEditDescription(e.target.value)}
+                  className='font-semibold rounded-[4px] px-3 text-[1.5rem] h-auto w-full outline-none text-black' />
+                <input
+                  type="text"
+                  value={editLink}
+                  onChange={(e) => setEditLink(e.target.value)}
+                  className='font-semibold rounded-[4px] px-3 text-[1.25rem] h-auto w-auto outline-none text-black border-b-[1.5px] leading-8 py-[0]' />
               </div>
             </div>
             <div className='px-3'>
@@ -317,7 +354,7 @@ function Content() {
                     </div>
                     :
                     <>
-                      {recipeData.ingredients.map((ingredient, index) => {
+                      {editIngredients.map((ingredient, index) => {
                         return (
                           <div key={index}>
                             <p className='text-[1.25rem]'>
@@ -342,12 +379,12 @@ function Content() {
                     </div>
                     :
                     <>
-                      {recipeData.steps.map((ingredient, index) => {
+                      {editInstructions.map((instruction, index) => {
                         return (
                           <div key={index}>
                             <p className='text-[1.25rem]'>
                               {index + 1}.&nbsp;&nbsp;
-                              {ingredient}
+                              {instruction}
                             </p>
                           </div>
                         );
@@ -359,44 +396,38 @@ function Content() {
               <div>
                 <h4 className='text-[1.75rem] font-semibold'>Notes</h4>
                 <div className='pl-[1.5rem]'>
-                  {(recipeData.notes.length === 0) ?
+                  <div className='flex flex-col'>
                     <div>
-                      <p className='text-[1.25rem]'>
-                        No notes.
-                      </p>
+                      {recipeData.notes.map((note, index) => {
+                        return (
+                          <div key={index} className='flex gap-2 my-auto'>
+                            <p className='text-[1.25rem]'>
+                              {index + 1}.&nbsp;&nbsp;
+                              {note}
+                            </p>
+                            <button onClick={() => deleteNote(index)} onMouseOver={({ target }) => target.style.color = "red"} onMouseOut={({ target }) => target.style.color = "white"}>
+                              <Trash className='my-auto w-6 h-auto hover:invert-1' ></Trash>
+                            </button>
+                          </div>
+                        );
+                      })}
                     </div>
-                    :
-                    <div className='flex flex-col'>
-                      <div>
-                        {recipeData.notes.map((ingredient, index) => {
-                          return (
-                            <div key={index}>
-                              <p className='text-[1.25rem]'>
-                                {index + 1}.&nbsp;&nbsp;
-                                {ingredient}
-                              </p>
-                            </div>
-                          );
-                        })}
+                    <div className='flex gap-5'>
+                      <div className='flex gap-3 my-auto w-[50%] min-w-[50rem]'>
+                        <input
+                          type="text"
+                          onChange={(e) => setAddNotes(e.target.value)}
+                          className='font-semibold rounded-[4px] px-3 text-[1.25rem] h-fit w-full outline-none text-black'
+                          placeholder='Note'>
+                        </input>
                       </div>
-                      <div className='flex gap-5'>
-                        <div className='flex gap-3 my-auto'>
-                          <input
-                            className='font-semibold rounded-[4px] px-3 text-[1.25rem] h-fit w-auto outline-none text-black'
-                            placeholder='Amount'>
-                          </input>
-                          <input
-                            className='font-semibold rounded-[4px] px-3 text-[1.25rem] h-fit w-auto outline-none text-black'
-                            placeholder='Item Name'>
-                          </input>
-                        </div>
-                        <button
-                          className="mb-[.1rem] whitespace-nowrap text-[1rem] leading-8 cursor-pointer w-fit border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.5vw] py-[.25rem]">
-                          <h4 className='text-2xl font-semibold'>Add</h4>
-                        </button>
-                      </div>
+                      <button
+                        onClick={addNote}
+                        className="mb-[.1rem] whitespace-nowrap text-[1rem] leading-8 cursor-pointer w-fit border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.5vw] py-[.25rem]">
+                        <h4 className='text-2xl font-semibold'>Add</h4>
+                      </button>
                     </div>
-                  }
+                  </div>
                 </div>
               </div>
             </div>
