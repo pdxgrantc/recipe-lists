@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import validator from 'validator';
 
 // Firebase
 import { auth, db } from '../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { doc, onSnapshot, deleteDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { doc, onSnapshot, deleteDoc, updateDoc, arrayRemove } from 'firebase/firestore';
 
 // Partials
 import Header from '../Static/Header/Header';
 import Footer from '../Static/Footer/Footer';
 import SignedOut from '../Static/SignedOut';
+
+// Helper
+import { isAlphaNumericWithSpaces, isValidUrl } from './helper';
 
 // SVGs
 import { BiEditAlt as Pencil } from 'react-icons/bi';
@@ -76,6 +78,7 @@ function Content() {
         recipeDocRef,
         (docSnapshot) => {
           if (docSnapshot.exists()) {
+            // After the document is retrieved, set the local state with the data
             setRecipeData(docSnapshot.data());
             setEditTitle(docSnapshot.data().title);
             setEditDescription(docSnapshot.data().description);
@@ -84,45 +87,33 @@ function Content() {
             setEditInstructions(docSnapshot.data().instructions);
           }
           else {
+            // If the document does not exist, set the local state to null to route to 404
             setRecipeData({ title: null });
           }
         },
         (error) => {
+          // other error states
           console.error(error);
         }
       );
-
+      // Unsubscribe from the document on unmount
       return () => unsubscribe();
     }
   }, [recipeTitle, user]);
 
+  // react function to handle the deletion of a recipe
   function confirmDelete() {
     let text = "Are you sure you want to delete this recipe.\nPress either OK or Cancel.";
     if (window.confirm(text) === true) {
-      doDelete();
+      // delete document at path 'users/{user.uid}/recipes/{recipeTitle}'
+      const recipeDocRef = doc(db, 'users', user.uid, 'recipes', recipeTitle);
+      deleteDoc(recipeDocRef)
+      // route to home page
+      window.location.href = '/';
+      return;
     } else {
       return;
     }
-  }
-
-  function doDelete() {
-    // delete document at path 'users/{user.uid}/recipes/{recipeTitle}'
-    const recipeDocRef = doc(db, 'users', user.uid, 'recipes', recipeTitle);
-    deleteDoc(recipeDocRef)
-    // route to home page
-    window.location.href = '/';
-  }
-
-  function isValidUrl(url) {
-    if ((validator.isURL(url)) && (url.startsWith("https://") || url.startsWith("http://"))) {
-      return true
-    } else {
-      return false
-    }
-  }
-
-  function isAlphaNumericWithSpaces(str) {
-    return /^[a-zA-Z0-9\s]+$/.test(str);
   }
 
   function saveEdit() {
