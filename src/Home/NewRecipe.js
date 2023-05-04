@@ -88,7 +88,7 @@ export default function NewRecipe() {
                 <div className='flex flex-col gap-4 py-4'>
                     <input className="rounded-[4px] text-black w-[50vw] h-[5vh] text-[1.5rem] border-[1.5px] border-black focus:outline-none px-2"
                         type='text'
-                        placeholder='Recipe Title'
+                        placeholder='Recipe Title (you cannot change this later)'
                         value={recipeTitle}
                         onChange={(e) => setRecipeTitle(e.target.value)}
                     />
