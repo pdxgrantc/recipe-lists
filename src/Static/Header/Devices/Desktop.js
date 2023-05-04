@@ -20,7 +20,7 @@ export default function DesktopHeader() {
                     <div className="h-[100%] flex justify-between pr-[3vw]">
                         <Link to="/">
                             <div className='flex gap-7 h-[100%] w-[28rem] bg-black pl-[2vw]'>
-                            <Basket className='h-[4.5rem] my-auto'></Basket>
+                                <Basket className='h-[4.5rem] my-auto'></Basket>
                                 <h1 className="align-middle text-[3.25rem] font-bold cursor-pointer" to="/">Home</h1>
                             </div>
                         </Link>
@@ -109,21 +109,24 @@ function DropdownMenu() {
     }
 
     function TopLink() {
-        if (window.location.pathname === "/") {
-            return (
-                <DropdownItem
-                    leftIcon={<Basket />}
-                    route="/My-Recipes">
-                    My Recipes
-                </DropdownItem>
-            )
-        }
-        else {
+        if (window.location.pathname !== "/") {
             return (
                 <DropdownItem
                     leftIcon={<Basket />}
                     route="/">
                     Home
+                </DropdownItem>
+            )
+        }
+    }
+
+    function MyRecipes() {
+        if (window.location.pathname !== "/My-Recipes") {
+            return (
+                <DropdownItem
+                    leftIcon={<Basket />}
+                    route="/My-Recipes">
+                    My Recipes
                 </DropdownItem>
             )
         }
@@ -138,6 +141,7 @@ function DropdownMenu() {
                 unmountOnExit>
                 <div className="menu">
                     <TopLink></TopLink>
+                    <MyRecipes></MyRecipes>
                     <div onClick={signOutUser}>
                         <DropdownItem
                             leftIcon={<PersonIcon />}>
