@@ -22,6 +22,13 @@ module.exports = {
       text_pink: "#e95d90",
       text_teal: "#14cee3",
     },
+    fontSize: {
+      small: ['1.5rem'],
+      base: ['2rem'],
+      small_header: ['2.25rem'],
+      header: ['2.75rem'],
+      large_header: ['3.5rem'],
+    },
     screens: {
       on_desktop: { 'min': '951px' },
       on_mobile: { 'max': '950px' },
