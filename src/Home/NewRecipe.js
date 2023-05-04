@@ -58,10 +58,10 @@ export default function NewRecipe() {
                 setDoc(recipeDocRef, {
                     title: recipeTitle,
                     description: recipeDescription,
-                    link: recipeLink,
+                    imgLink: recipeLink,
                     ingredients: [],
                     steps: [],
-                    notes: [], // bulleted list
+                    notes: [],
                     createdAt: new Date(),
                     lastEditedAt: new Date(),
                 })
@@ -100,7 +100,7 @@ export default function NewRecipe() {
                     />
                     <input className="rounded-[4px] text-black w-[50vw] h-[5vh] text-[1.5rem] border-[1.5px] border-black focus:outline-none px-2"
                         type='text'
-                        placeholder='Recipe Link (optional)'
+                        placeholder='Recipe Image Link (optional)'
                         value={recipeLink}
                         onChange={(e) => setRecipeLink(e.target.value)}
                     />
