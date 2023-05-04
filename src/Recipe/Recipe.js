@@ -195,7 +195,7 @@ function Content() {
       </Helmet>
       <div className='w-full'>
         <div className='flex justify-between w-full'>
-          <h2 className='text-header font-semibold pr-12 whitespace-nowrap w-full'>{recipeTitle}</h2>
+          <h2 className='text-large_header font-semibold pr-12 whitespace-nowrap w-full'>{recipeTitle}</h2>
           <div className='flex my-auto text-base'>
             {isEditing ?
               <>
@@ -332,20 +332,18 @@ function Content() {
             </div>
           </div>
           :
-          <div className='flex flex-col gap-5 mt-5'>
-            <div className='flex gap-[3.5rem]'>
-              {!(recipeImageURL === '') ? <img className='w-[50%] h-[50%] rounded-[4px]' src={recipeImageURL} alt='user recipe' /> : <></>}
-              {!(recipeDescription === '') ?
-                <div className='flex flex-col text-small'>
-                  <h3 className='text-small_header font-semibold'>Description</h3>
-                  <p className='w-full h-[10rem] text-small rounded-[4px] ml-3'>
-                    {recipeDescription}
-                  </p>
-                </div>
-                :
-                <></>
-              }
-            </div>
+          <div className='grid grid-cols-2 gap-10 mt-5'>
+            {!(recipeImageURL === '') ? <img className='w-full h-auto rounded-[4px]' src={recipeImageURL} alt='user recipe' /> : <></>}
+            {!(recipeDescription === '') ?
+              <div className='flex flex-col text-small'>
+                <h3 className='text-small_header font-semibold'>Description</h3>
+                <p className='w-full h-[10rem] text-small rounded-[4px] ml-3'>
+                  {recipeDescription}
+                </p>
+              </div>
+              :
+              <></>
+            }
             {!(recipeIngredients.length === 0) ?
               <>
                 <div className='flex flex-col text-small'>
