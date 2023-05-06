@@ -145,7 +145,7 @@ function DropdownMenu() {
     }
 
     return (
-        <div className="dropdown absolute translate-x-[26%] top-[80px] right-[7.3vw] w-[250px]">
+        <div className="dropdown absolute top-[80px] right-[3vw]  w-[250px]">
             <CSSTransition
                 in={activeMenu === 'main'}
                 timeout={500}
