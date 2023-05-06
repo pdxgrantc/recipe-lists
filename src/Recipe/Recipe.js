@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 // Firebase
 import { auth, db } from '../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { doc, onSnapshot, deleteDoc, updateDoc, collection } from 'firebase/firestore';
+import { doc, onSnapshot, deleteDoc, updateDoc, collection, getDoc } from 'firebase/firestore';
 
 // Partials
 import Header from '../Static/Header/Header';
@@ -13,6 +13,7 @@ import SignedOut from '../Static/SignedOut';
 
 // SVGs
 import { BiEditAlt as Pencil } from 'react-icons/bi';
+import { GoChecklist as List } from 'react-icons/go';
 import { FaTrashAlt as Trash } from 'react-icons/fa';
 import { BiSave as Save } from 'react-icons/bi';
 
@@ -188,6 +189,32 @@ function Content() {
     window.location.href = '/'
   }
 
+  const addToShoppingList = () => {
+    const userDocRef = doc(db, 'users', auth.currentUser.uid)
+    // shoppingList is a field in the user document
+
+    // get the shopping list
+    getDoc(userDocRef).then((doc) => {
+      if (doc.exists()) {
+        // if the shopping list exists, add the ingredients to it
+        const shoppingList = doc.data().shoppingList
+        const newShoppingList = [...shoppingList, ...recipeIngredients]
+        // update the shopping list
+        updateDoc(userDocRef, {
+          shoppingList: newShoppingList,
+        }).then(() => {
+          console.log('Shopping list updated')
+        }).catch((error) => {
+          console.log('Error getting document:', error);
+        });
+      } else {
+        console.log('No such document!');
+      }
+    }).catch((error) => {
+      console.log('Error getting document:', error);
+    });
+  }
+
   return (
     <>
       <Helmet>
@@ -344,23 +371,29 @@ function Content() {
               :
               <></>
             }
-            {!(recipeIngredients.length === 0) ?
-              <>
-                <div className='flex flex-col text-small'>
-                  <h3 className='text-small_header font-semibold'>Ingredients</h3>
-                  <div className='flex flex-col ml-3'>
-                    {recipeIngredients.map((ingredient, index) => (
-                      <div className='flex gap-3' key={index}>
-                        <p>{index + 1}. {ingredient.amount}</p>
-                        <p>{ingredient.name}</p>
-                      </div>
-                    ))}
+            <>
+              {!(recipeIngredients.length === 0) ?
+                <div className='flex flex-col gap-3'>
+                  <div className='flex flex-col text-small'>
+                    <h3 className='text-small_header font-semibold'>Ingredients</h3>
+                    <div className='flex flex-col ml-3'>
+                      {recipeIngredients.map((ingredient, index) => (
+                        <div className='flex gap-3' key={index}>
+                          <p>{index + 1}. {ingredient.amount}</p>
+                          <p>{ingredient.name}</p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
+                  <button onClick={addToShoppingList} className='w-fit text-small flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem]'>
+                    <List className='my-auto w-auto h-[2rem]' />
+                    <h4>Add to Shopping List</h4>
+                  </button>
                 </div>
-              </>
-              :
-              <></>
-            }
+                :
+                <></>
+              }
+            </>
             {!(recipeInstructions.length === 0) ?
               <>
                 <div className='flex flex-col text-small'>

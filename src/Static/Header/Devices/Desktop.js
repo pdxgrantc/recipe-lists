@@ -131,6 +131,18 @@ function DropdownMenu() {
             )
         }
     }
+    
+    function ShoppingList() {
+        if (window.location.pathname !== "/Shopping-List") {
+            return (
+                <DropdownItem
+                    leftIcon={<Basket />}
+                    route="/Shopping-List">
+                    Shopping List
+                </DropdownItem>
+            )
+        }
+    }
 
     return (
         <div className="dropdown absolute translate-x-[26%] top-[80px] right-[7.3vw] w-[250px]">
@@ -142,6 +154,7 @@ function DropdownMenu() {
                 <div className="menu">
                     <TopLink></TopLink>
                     <MyRecipes></MyRecipes>
+                    <ShoppingList></ShoppingList>
                     <div onClick={signOutUser}>
                         <DropdownItem
                             leftIcon={<PersonIcon />}>

@@ -28,6 +28,7 @@ export const signInWithGoogle = () => {
                     email: result.user.email,
                     photoURL: result.user.photoURL,
                     uid: result.user.uid,
+                    shoppingList: [],
                     createdAt: new Date(),
                 });
             }
