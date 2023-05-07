@@ -37,9 +37,9 @@ export default function MyRecipes() {
                 <Helmet>
                     <title>Recipes - Home</title>
                 </Helmet>
-                <div className="bg-main_bg_color text-text_white h-[100vh] flex flex-col">
+                <div className="bg-main_bg_color text-text_white min-h-[100vh] flex flex-col">
                     <Header />
-                    <div className="w-full h-max basis-auto grow">
+                    <div className="w-full h-fit basis-auto grow">
                         <div className='m-auto rounded-[10px] h-[80%] bg-black w-[90%]'>
                             <div className='flex gap-20 w-[100%] px-[4%] py-[3%]'>
                                 <Content />
@@ -68,8 +68,6 @@ function Content() {
         });
         return unsubscribe;
     }, [user]);
-
-    console.log(recipesData.recipes);
 
     if (!recipesData.recipes) {
         return (

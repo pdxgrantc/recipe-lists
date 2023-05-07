@@ -1,0 +1,53 @@
+[debug] [2023-05-07T00:59:43.268Z] ----------------------------------------------------------------------
+[debug] [2023-05-07T00:59:43.270Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\pdxgr\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2023-05-07T00:59:43.271Z] CLI Version:   11.30.0
+[debug] [2023-05-07T00:59:43.271Z] Platform:      win32
+[debug] [2023-05-07T00:59:43.271Z] Node Version:  v18.16.0
+[debug] [2023-05-07T00:59:43.272Z] Time:          Sat May 06 2023 17:59:43 GMT-0700 (Pacific Daylight Time)
+[debug] [2023-05-07T00:59:43.272Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-05-07T00:59:43.357Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-05-07T00:59:43.358Z] > authorizing via signed-in user (pdxgrantc@gmail.com)
+[debug] [2023-05-07T00:59:43.358Z] [iam] checking project recipe-lists-aa6bb for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2023-05-07T00:59:43.361Z] > refreshing access token with scopes: []
+[debug] [2023-05-07T00:59:43.363Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2023-05-07T00:59:43.363Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-05-07T00:59:43.609Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2023-05-07T00:59:43.609Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2023-05-07T00:59:43.618Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/recipe-lists-aa6bb:testIamPermissions [none]
+[debug] [2023-05-07T00:59:43.618Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/recipe-lists-aa6bb:testIamPermissions x-goog-quota-user=projects/recipe-lists-aa6bb
+[debug] [2023-05-07T00:59:43.618Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/recipe-lists-aa6bb:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-05-07T00:59:43.909Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/recipe-lists-aa6bb:testIamPermissions 200
+[debug] [2023-05-07T00:59:43.909Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/recipe-lists-aa6bb:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-05-07T00:59:43.910Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/recipe-lists-aa6bb [none]
+[debug] [2023-05-07T00:59:44.286Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/recipe-lists-aa6bb 200
+[debug] [2023-05-07T00:59:44.286Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/recipe-lists-aa6bb {"projectId":"recipe-lists-aa6bb","projectNumber":"348552446043","displayName":"Recipe Lists","name":"projects/recipe-lists-aa6bb","resources":{"hostingSite":"recipe-lists-aa6bb"},"state":"ACTIVE","etag":"1_bc5c325c-fd91-4a95-8fbb-a5c170abbfed"}
+[info] 
+[info] === Deploying to 'recipe-lists-aa6bb'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2023-05-07T00:59:44.290Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/recipe-lists-aa6bb/versions [none]
+[debug] [2023-05-07T00:59:44.290Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/recipe-lists-aa6bb/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2023-05-07T00:59:44.953Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/recipe-lists-aa6bb/versions 200
+[debug] [2023-05-07T00:59:44.953Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/recipe-lists-aa6bb/versions {"name":"projects/348552446043/sites/recipe-lists-aa6bb/versions/a338f508c9bf20e4","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[info] i  hosting[recipe-lists-aa6bb]: beginning deploy... 
+[info] i  hosting[recipe-lists-aa6bb]: found 17 files in build 
+[debug] [2023-05-07T00:59:44.964Z] [hosting] uploading with 200 concurrency
+[debug] [2023-05-07T00:59:45.495Z] [hosting] hash cache [YnVpbGQ] stored for 17 files
+[debug] [2023-05-07T00:59:45.495Z] [hosting][hash queue][FINAL] {"max":524,"min":3,"avg":38.76470588235294,"active":0,"complete":17,"success":17,"errored":0,"retried":0,"total":17,"elapsed":529}
+[debug] [2023-05-07T00:59:45.496Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/348552446043/sites/recipe-lists-aa6bb/versions/a338f508c9bf20e4:populateFiles [none]
+[debug] [2023-05-07T00:59:45.496Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/348552446043/sites/recipe-lists-aa6bb/versions/a338f508c9bf20e4:populateFiles {"files":{"/favicon.ico":"b15d3dbd351998ec2afc97bf46c80e55861ed239c01f52511dc1964cc757729f","/logo192.png":"3ee59515172ee198f3be375979df15ac5345183e656720a381b8872b2a39dc8b","/logo512.png":"ee7e2f3fdb8209c4b6fd7bef6ba50d1b9dba30a25bb5c3126df057e1cb6f5331","/manifest.json":"5c997de1364b8be939319fa9209abd77f2caf7f8844999a9e2e9173f844e7840","/robots.txt":"b2090cf9761ef60aa06e4fab97679bd43dfa5e5df073701ead5879d7c68f1ec5","/asset-manifest.json":"d8578aa44d455b8414c463d9d8bdee68f5eaa4c0cc5cae1326e85632f5023adf","/index.html":"5ad28f1c511f446ad815760d540f2b55e030f9572f08f757bca2da95b5501961","/static/js/787.31d39445.chunk.js":"d878c34933e133adc26ee4f00236572f9e844fa45c8ea98e3a80c7f35477ea7b","/static/css/main.a6f27ca3.css":"419cabec3e4cb572c3bf0d07fa8af222c96dbb672824a58a32c27f32d5e694c5","/static/css/main.a6f27ca3.css.map":"707c5b3c1ff517454f4b679e6ba7af4a2323bcff2cdf4eab1e5c22ec42f6208c","/static/js/787.31d39445.chunk.js.map":"5ceb30c68000f599d18ef2d74e11ca55691f81107ae2347de51f08706a0e5ec7","/static/js/main.172300f6.js.LICENSE.txt":"e958bb109d0c32a52269aa65b2fe698cca54f447db8d9febdbff651a353e610f","/static/media/Basket.b37fddc5a10166e23b6d197664cef3c0.svg":"365e2d0cf975748acfd34b48df3cd63527ac11435321ef471650beb0f815cab9","/static/media/Person-Icon.9661d72225967544d760f1b97235b623.svg":"80037fd11faa84c6242b5cffa9ad0bc8c2104fd2454d2f3afa8f64ba05872fb2","/static/media/Trashcan.ddb6b7bbd8e2780640de1b69653c764f.svg":"7df5b6d19074ce3966fb261df33ee54d37b2f95d22716a873c5083f7f22bf26a","/static/js/main.172300f6.js":"f3969455e67a40310e16f22ae9f13efb5bb3816b28f3fed8e940bedc6c9496fd","/static/js/main.172300f6.js.map":"85bb657f8c51da275664afa373ef2309d0b9733ff4483df33d6366d5456ee05d"}}
+[debug] [2023-05-07T00:59:45.914Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/348552446043/sites/recipe-lists-aa6bb/versions/a338f508c9bf20e4:populateFiles 200
+[debug] [2023-05-07T00:59:45.915Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/348552446043/sites/recipe-lists-aa6bb/versions/a338f508c9bf20e4:populateFiles {"uploadRequiredHashes":["d8578aa44d455b8414c463d9d8bdee68f5eaa4c0cc5cae1326e85632f5023adf","5ad28f1c511f446ad815760d540f2b55e030f9572f08f757bca2da95b5501961","85bb657f8c51da275664afa373ef2309d0b9733ff4483df33d6366d5456ee05d","f3969455e67a40310e16f22ae9f13efb5bb3816b28f3fed8e940bedc6c9496fd"],"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/recipe-lists-aa6bb/versions/a338f508c9bf20e4/files"}
+[debug] [2023-05-07T00:59:45.916Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/recipe-lists-aa6bb/versions/a338f508c9bf20e4/files/d8578aa44d455b8414c463d9d8bdee68f5eaa4c0cc5cae1326e85632f5023adf [none]
+[debug] [2023-05-07T00:59:45.916Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/recipe-lists-aa6bb/versions/a338f508c9bf20e4/files/d8578aa44d455b8414c463d9d8bdee68f5eaa4c0cc5cae1326e85632f5023adf [stream]
+[debug] [2023-05-07T00:59:45.917Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/recipe-lists-aa6bb/versions/a338f508c9bf20e4/files/5ad28f1c511f446ad815760d540f2b55e030f9572f08f757bca2da95b5501961 [none]
+[debug] [2023-05-07T00:59:45.917Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/recipe-lists-aa6bb/versions/a338f508c9bf20e4/files/5ad28f1c511f446ad815760d540f2b55e030f9572f08f757bca2da95b5501961 [stream]
+[debug] [2023-05-07T00:59:45.918Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/recipe-lists-aa6bb/versions/a338f508c9bf20e4/files/85bb657f8c51da275664afa373ef2309d0b9733ff4483df33d6366d5456ee05d [none]
+[debug] [2023-05-07T00:59:45.918Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/recipe-lists-aa6bb/versions/a338f508c9bf20e4/files/85bb657f8c51da275664afa373ef2309d0b9733ff4483df33d6366d5456ee05d [stream]
+[debug] [2023-05-07T00:59:45.919Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/recipe-lists-aa6bb/versions/a338f508c9bf20e4/files/f3969455e67a40310e16f22ae9f13efb5bb3816b28f3fed8e940bedc6c9496fd [none]
+[debug] [2023-05-07T00:59:45.919Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/recipe-lists-aa6bb/versions/a338f508c9bf20e4/files/f3969455e67a40310e16f22ae9f13efb5bb3816b28f3fed8e940bedc6c9496fd [stream]
+[debug] [2023-05-07T00:59:45.920Z] [hosting][populate queue][FINAL] {"max":421,"min":421,"avg":421,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":426}
+[debug] [2023-05-07T00:59:45.920Z] [hosting] uploads queued: 4
+[debug] [2023-05-07T00:59:46.552Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/recipe-lists-aa6bb/versions/a338f508c9bf20e4/files/d8578aa44d455b8414c463d9d8bdee68f5eaa4c0cc5cae1326e85632f5023adf 200
+[debug] [2023-05-07T00:59:46.552Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/recipe-lists-aa6bb/versions/a338f508c9bf20e4/files/d8578aa44d455b8414c463d9d8bdee68f5eaa4c0cc5cae1326e85632f5023adf [stream]
