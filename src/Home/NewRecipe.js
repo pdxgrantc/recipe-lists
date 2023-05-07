@@ -27,35 +27,35 @@ export default function NewRecipe() {
         }
     }
 
-    const submitToDB = (e) => {
-        e.preventDefault()
+    const submitToDB = async (e) => {
+        e.preventDefault();
 
         // ensure that the title is alphanumeric
         if (recipeTitle === '') {
-            return alert('Please enter a title for your recipe')
+            return alert('Please enter a title for your recipe');
         }
         if (!isAlphaNumericWithSpaces(recipeTitle)) {
-            return alert('Please enter a title that is alphanumeric')
+            return alert('Please enter a title that is alphanumeric');
         }
-        if ((recipeLink.length !== 0)) {
+        if (recipeLink.length !== 0) {
             if (isValidUrl(recipeLink) === false) {
-                return alert('Please enter a valid URL\nmust start with https:// or http://')
+                return alert('Please enter a valid URL\nmust start with https:// or http://');
             }
-        }
-        else if (recipeTitle.length > 35) {
-            return alert('Please enter a title that is less than 35 characters')
+        } else if (recipeTitle.length > 75) {
+            return alert('Please enter a title that is less than 35 characters');
         }
 
-        const userDocRef = doc(db, 'users', user.uid)
-        const recipesRef = collection(userDocRef, 'recipes')
+        const userDocRef = doc(db, 'users', user.uid);
+        const recipesRef = collection(userDocRef, 'recipes');
         const recipeDocRef = doc(recipesRef, recipeTitle);
 
-        getDoc(recipeDocRef).then((doc) => {
-            if (doc.exists()) {
-                alert('A recipe with that title already exists')
-                setRecipeTitle('')
+        try {
+            const docSnapshot = await getDoc(recipeDocRef);
+            if (docSnapshot.exists()) {
+                alert('A recipe with that title already exists');
+                setRecipeTitle('');
             } else {
-                setDoc(recipeDocRef, {
+                await setDoc(recipeDocRef, {
                     title: recipeTitle,
                     description: recipeDescription,
                     imgLink: recipeLink,
@@ -64,15 +64,15 @@ export default function NewRecipe() {
                     notes: [],
                     createdAt: new Date(),
                     lastEditedAt: new Date(),
-                })
-                setRecipeTitle('')
-                setRecipeDescription('')
-                setRecipeLink('')
+                });
+                setRecipeTitle('');
+                setRecipeDescription('');
+                setRecipeLink('');
             }
-        }).catch((error) => {
+        } catch (error) {
             console.log('Error getting document:', error);
-        });
-    }
+        }
+    };
 
     const reset = (e) => {
         e.preventDefault()

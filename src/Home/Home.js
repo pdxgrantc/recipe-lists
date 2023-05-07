@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom'
 
 // Firebase
 import { auth, db } from '../firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { collection, query, orderBy, limit, onSnapshot } from 'firebase/firestore';
+import { collection, query, orderBy, limit, onSnapshot, getDocs } from 'firebase/firestore';
 
 // Partials
 import NewRecipe from './NewRecipe'
@@ -65,7 +65,7 @@ function SideBar() {
       <div className="h-[1vh]"></div>
       <div className="min-h-[125px]">
         <div>
-          <h2 className="text-[2.25rem] font-semibold">Your Recipes</h2>
+          <h2 className="text-[2.25rem] font-semibold">Recent Recipes</h2>
           <div className="text-[1.5rem]">
             <RecipesList />
           </div>
@@ -79,16 +79,31 @@ function RecipesList() {
   const [user] = useAuthState(auth);
   const [recipes, setRecipes] = useState([]);
 
-  onSnapshot(
-    query(collection(db, "users", user.uid, "recipes"), orderBy("lastEditedAt", "desc"), limit(5)),
-    (snapshot) => {
-      const recipes = snapshot.docs.map((doc) => ({
+  const fetchRecipes = useCallback(async () => {
+    try {
+      const recipesRef = collection(db, "users", user.uid, "recipes");
+      const q = query(recipesRef, orderBy("lastEditedAt", "desc"), limit(5));
+      const querySnapshot = await getDocs(q);
+      const recipes = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
       setRecipes(recipes);
+    } catch (error) {
+      console.log(error);
     }
-  );
+  }, [user.uid]);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      collection(db, "users", user.uid, "recipes"),
+      () => {
+        fetchRecipes();
+      }
+    );
+    return () => unsubscribe();
+  }, [fetchRecipes, user.uid]);
+
 
   if (!recipes) {
     return (

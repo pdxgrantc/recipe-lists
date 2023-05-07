@@ -131,25 +131,28 @@ function Content() {
   // write a function that when save is clicked, it will update the document at that path with the new data
   // the data is stored in the state variables above
 
-  const saveRecipe = () => {
-    const userDocRef = doc(db, 'users', auth.currentUser.uid)
-    const recipesRef = collection(userDocRef, 'recipes')
-    const recipeDocRef = doc(recipesRef, decodedTitle);
+  const saveRecipe = async () => {
+    try {
+      const userDocRef = doc(db, 'users', auth.currentUser.uid)
+      const recipesRef = collection(userDocRef, 'recipes')
+      const recipeDocRef = doc(recipesRef, decodedTitle);
 
-    updateDoc(recipeDocRef, {
-      title: recipeTitle,
-      description: recipeDescription,
-      imgLink: recipeImageURL,
-      ingredients: recipeIngredients,
-      steps: recipeInstructions,
-      notes: recipeNotes,
-      lastEditedAt: new Date(),
-    }).then(() => {
-      setIsEditing(!isEditing)
-    }).catch((error) => {
-      console.log('Error getting document:', error);
-    });
+      await updateDoc(recipeDocRef, {
+        title: recipeTitle,
+        description: recipeDescription,
+        imgLink: recipeImageURL,
+        ingredients: recipeIngredients,
+        steps: recipeInstructions,
+        notes: recipeNotes,
+        lastEditedAt: new Date(),
+      });
+
+      setIsEditing(!isEditing);
+    } catch (error) {
+      console.log('Error updating document:', error);
+    }
   }
+
 
   // when the page loads, it should get the data from the database and store it in the state variables above
   // the data is stored in the state variables above
@@ -179,41 +182,35 @@ function Content() {
     const recipesRef = collection(userDocRef, 'recipes')
     const recipeDocRef = doc(recipesRef, decodedTitle);
 
-    deleteDoc(recipeDocRef).then(() => {
-      window.location.href = '/recipes'
-    }).catch((error) => {
-      console.error("Error removing document: ", error);
-    });
-
-    // redirect to home
-    window.location.href = '/'
+    deleteDoc(recipeDocRef)
+      .then(() => {
+        window.location.href = '/'
+      })
+      .catch((error) => {
+        console.error("Error removing document: ", error);
+      });
   }
 
-  const addToShoppingList = () => {
-    const userDocRef = doc(db, 'users', auth.currentUser.uid)
-    // shoppingList is a field in the user document
 
-    // get the shopping list
-    getDoc(userDocRef).then((doc) => {
-      if (doc.exists()) {
-        // if the shopping list exists, add the ingredients to it
-        const shoppingList = doc.data().shoppingList
-        const newShoppingList = [...shoppingList, ...recipeIngredients]
-        // update the shopping list
-        updateDoc(userDocRef, {
+  const addToShoppingList = async () => {
+    const userDocRef = doc(db, 'users', auth.currentUser.uid);
+
+    try {
+      const userDoc = await getDoc(userDocRef);
+      if (userDoc.exists()) {
+        const shoppingList = userDoc.data().shoppingList;
+        const newShoppingList = [...shoppingList, ...recipeIngredients];
+        await updateDoc(userDocRef, {
           shoppingList: newShoppingList,
-        }).then(() => {
-          console.log('Shopping list updated')
-        }).catch((error) => {
-          console.log('Error getting document:', error);
         });
+        console.log('Shopping list updated');
       } else {
         console.log('No such document!');
       }
-    }).catch((error) => {
+    } catch (error) {
       console.log('Error getting document:', error);
-    });
-  }
+    }
+  };
 
   return (
     <>
