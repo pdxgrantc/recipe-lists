@@ -13,7 +13,7 @@ import Footer from '../Static/Footer/Footer'
 import SignedOut from "../Static/SignedOut"
 
 
-export default function MyRecipes() {
+export default function AllRecipes() {
     const [user] = useAuthState(auth);
 
     if (!user) {

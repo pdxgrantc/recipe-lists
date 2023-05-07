@@ -120,13 +120,13 @@ function DropdownMenu() {
         }
     }
 
-    function MyRecipes() {
+    function AllRecipes() {
         if (window.location.pathname !== "/My-Recipes") {
             return (
                 <DropdownItem
                     leftIcon={<Basket />}
-                    route="/My-Recipes">
-                    My Recipes
+                    route="/All-Recipes">
+                    All Recipes
                 </DropdownItem>
             )
         }
@@ -153,7 +153,7 @@ function DropdownMenu() {
                 unmountOnExit>
                 <div className="menu">
                     <Home></Home>
-                    <MyRecipes></MyRecipes>
+                    <AllRecipes></AllRecipes>
                     <ShoppingList></ShoppingList>
                     <div onClick={signOutUser}>
                         <DropdownItem
