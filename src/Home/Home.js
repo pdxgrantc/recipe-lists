@@ -104,6 +104,15 @@ function RecipesList() {
     return () => unsubscribe();
   }, [fetchRecipes, user.uid]);
 
+  const titleTruncate = (title) => {
+    if (title.length <= 35) {
+      return title
+    }
+    else {
+      // truncate at the nearest word
+      return title.substring(0, 35) + "..."
+    }
+  }
 
   if (!recipes) {
     return (
@@ -126,7 +135,7 @@ function RecipesList() {
                   key={recipe.id}
                   className="whitespace-nowrap text-[1.6rem] leading-8 cursor-pointer w-fit border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.5vw] py-[.25rem]"
                   to={"/My-Recipes/" + recipe.title}>
-                  {recipe.title}
+                  {titleTruncate(recipe.title)}
                 </Link>
               ))
               }
