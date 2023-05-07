@@ -108,7 +108,7 @@ function DropdownMenu() {
         }
     }
 
-    function TopLink() {
+    function Home() {
         if (window.location.pathname !== "/") {
             return (
                 <DropdownItem
@@ -152,7 +152,7 @@ function DropdownMenu() {
                 classNames="menu-primary"
                 unmountOnExit>
                 <div className="menu">
-                    <TopLink></TopLink>
+                    <Home></Home>
                     <MyRecipes></MyRecipes>
                     <ShoppingList></ShoppingList>
                     <div onClick={signOutUser}>

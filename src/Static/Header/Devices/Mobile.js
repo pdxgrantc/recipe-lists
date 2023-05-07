@@ -3,16 +3,13 @@ import { Link } from 'react-router-dom'
 import { CSSTransition } from 'react-transition-group'
 
 // Firebase
-import { auth, signInWithGoogle, signOutUser } from '../../../../../firebase'
+import { auth, signInWithGoogle, signOutUser } from '../../../firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
 
 // static
-import { ReactComponent as PersonIcon } from '../../../Images/PersonIcon.svg'
-import { ReactComponent as CogIcon } from '../../../Images/Cog.svg'
-import { ReactComponent as ChevronIcon } from '../../../Images/Chevron.svg'
-import { ReactComponent as ChevronLeft } from '../../../Images/ChevronLeft.svg'
-import { ReactComponent as Basket } from '../../../Images/Basket.svg'
-import { ReactComponent as Bars } from '../../../Images/Bars.svg'
+import { ReactComponent as PersonIcon } from '../../SVG/Person-Icon.svg'
+import { ReactComponent as Basket } from '../../SVG/Basket.svg'
+import { ReactComponent as Bars } from '../../SVG/Bars.svg'
 
 
 export default function MobileHeader() {
@@ -21,18 +18,16 @@ export default function MobileHeader() {
   if (user) {
     return (
       <>
-        <div className="bg-dark_grey">
-          <div className="flex justify-between px-[7vw]">
+        <div className="bg-dark_grey pl-[5vw]">
+          <div className="flex justify-between">
             <div className="self-center w-fit">
               <Link to="/" className="text-[2.25rem] font-bold">Ez Shop</Link>
             </div>
-
             <div className="h-[5%] w-auto my-auto">
               <TopNav icon={<Bars />}>
                 <DropdownMenu></DropdownMenu>
               </TopNav>
             </div>
-
           </div>
         </div>
       </>
@@ -64,10 +59,11 @@ function TopNav(props) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className='my-[2px]'>
+    <div>
       <Link to="#" className="text-[2.25rem] w-fit" onClick={() => setOpen(!open)}>
-        <div className="flex transition duration-[300ms] rounded-[4px] px-[.4rem] py-[.0rem] h-min gap-[1vw]">
-          <div className='my-[0px] w-[55px] h-[55px]'>
+        <div className="flex hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] h-min gap-[1vw]">
+          <p className="whitespace-nowrap my-auto font-semibold">{props.name}</p>
+          <div className='my-[6px] w-[55px] align-middle'>
             {props.icon}
           </div>
         </div>
@@ -77,106 +73,203 @@ function TopNav(props) {
   );
 }
 
-/*
-function NavItem(props) {
-  const [user] = useAuthState(auth);
-  const [open, setOpen] = useState(false);
-
-  return (
-    <li className="nav-item">
-
-      <Link to="#" className="icon-button icon-button-dimensions" onClick={() => setOpen(!open)}>
-        {props.icon}
-      </Link>
-
-      {open && props.children}
-    </li>
-  );
-}
-*/
-
 function DropdownMenu() {
   const [activeMenu, setActiveMenu] = useState('main');
 
-  /*
-  const [menuHeight, setMenuHeight] = useState(null);
-
-  function calcHeight(el) {
-    const height = el.offsetHeight;
-    setMenuHeight(height);
-  }
-  */
-
   function DropdownItem(props) {
-    return (
-      <Link to="#" className="menu-item hover:bg-text_white hover:bg-opacity-50 font-semibold text-[1.25rem] whitespace-nowrap" onClick={() => props.goToMenu && setActiveMenu(props.goToMenu)}>
-        <span className="icon-button">{props.leftIcon}</span>
-        {props.children}
-        <span className="icon-right">{props.rightIcon}</span>
-      </Link>
-    );
-  }
-
-  function TopLink() {
-    if (window.location.pathname === "/") {
+    if (props.route) {
       return (
-        <DropdownItem
-          leftIcon={<Basket />}>
-          <Link to="/MyLists">My Lists</Link>
-        </DropdownItem>
-      )
+        <Link to={props.route} className="menu-item hover:bg-text_white hover:bg-opacity-50 font-semibold text-[1.25rem] whitespace-nowrap" onClick={() => props.goToMenu && setActiveMenu(props.goToMenu)}>
+          <span className="icon-button">{props.leftIcon}</span>
+          {props.children}
+          <span className="icon-right">{props.rightIcon}</span>
+        </Link>
+      );
     }
     else {
       return (
+        <Link to="#" className="menu-item hover:bg-text_white hover:bg-opacity-50 font-semibold text-[1.25rem] whitespace-nowrap" onClick={() => props.goToMenu && setActiveMenu(props.goToMenu)}>
+          <span className="icon-button">{props.leftIcon}</span>
+          {props.children}
+          <span className="icon-right">{props.rightIcon}</span>
+        </Link>
+      );
+    }
+  }
+
+  function Home() {
+    if (window.location.pathname !== "/") {
+        return (
+            <DropdownItem
+                leftIcon={<Basket />}
+                route="/">
+                Home
+            </DropdownItem>
+        )
+    }
+}
+
+  function MyRecipes() {
+    if (window.location.pathname !== "/My-Recipes") {
+      return (
         <DropdownItem
-          leftIcon={<Basket />}>
-          <Link to="/">Home</Link>
+          leftIcon={<Basket />}
+          route="/My-Recipes">
+          My Recipes
+        </DropdownItem>
+      )
+    }
+  }
+
+  function ShoppingList() {
+    if (window.location.pathname !== "/Shopping-List") {
+      return (
+        <DropdownItem
+          leftIcon={<Basket />}
+          route="/Shopping-List">
+          Shopping List
         </DropdownItem>
       )
     }
   }
 
   return (
-    <div className="dropdown translate-x-[-150px] top-[60px] w-fit">
+    <div className="dropdown absolute top-[67px] right-[0px] w-[250px]">
       <CSSTransition
         in={activeMenu === 'main'}
         timeout={500}
         classNames="menu-primary"
         unmountOnExit>
-
         <div className="menu">
-          <TopLink></TopLink>
-          <DropdownItem
-            leftIcon={<CogIcon />}
-            rightIcon={<ChevronIcon />}
-            goToMenu="settings">
-            Settings
-          </DropdownItem>
+          <Home></Home>
+          <MyRecipes></MyRecipes>
+          <ShoppingList></ShoppingList>
           <div onClick={signOutUser}>
             <DropdownItem
               leftIcon={<PersonIcon />}>
               Sign Out
             </DropdownItem>
           </div>
-
         </div>
-      </CSSTransition >
-
-      <CSSTransition
-        in={activeMenu === 'settings'}
-        timeout={500}
-        classNames="menu-secondary"
-        unmountOnExit>
-
-        <div className="menu">
-          <DropdownItem goToMenu="main" leftIcon={<ChevronLeft />}>
-            <h2>Go back</h2>
-          </DropdownItem>
-          <DropdownItem leftIcon={<CogIcon />}>Settings</DropdownItem>
-        </div>
-
       </CSSTransition>
-
-    </div >
+    </div>
   );
 }
+
+
+
+/*
+
+function TopNav(props) {
+    const [open, setOpen] = useState(false);
+
+    return (
+        <div>
+            <Link to="#" className="text-[2.25rem] w-fit" onClick={() => setOpen(!open)}>
+                <div className="flex hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] h-min gap-[1vw]">
+                    <p className="whitespace-nowrap my-auto font-semibold">{props.name}</p>
+                    <div className='my-[6px] w-[55px] align-middle'>
+                        {props.icon}
+                    </div>
+                </div>
+            </Link>
+            {open && props.children}
+        </div>
+    );
+}
+
+function UserPhoto() {
+    const [user] = useAuthState(auth);
+
+    return (
+        <div className="m-auto">
+            <img className="rounded-[100%] h-[90%] w-[90%] m-auto align-middle" src={user.photoURL} alt={PersonIcon} />
+        </div>
+    )
+}
+
+function DropdownMenu() {
+    const [activeMenu, setActiveMenu] = useState('main');
+
+    function DropdownItem(props) {
+        if (props.route) {
+            return (
+                <Link to={props.route} className="menu-item hover:bg-text_white hover:bg-opacity-50 font-semibold text-[1.25rem] whitespace-nowrap" onClick={() => props.goToMenu && setActiveMenu(props.goToMenu)}>
+                    <span className="icon-button">{props.leftIcon}</span>
+                    {props.children}
+                    <span className="icon-right">{props.rightIcon}</span>
+                </Link>
+            );
+        }
+        else {
+            return (
+                <Link to="#" className="menu-item hover:bg-text_white hover:bg-opacity-50 font-semibold text-[1.25rem] whitespace-nowrap" onClick={() => props.goToMenu && setActiveMenu(props.goToMenu)}>
+                    <span className="icon-button">{props.leftIcon}</span>
+                    {props.children}
+                    <span className="icon-right">{props.rightIcon}</span>
+                </Link>
+            );
+        }
+    }
+
+    function TopLink() {
+        if (window.location.pathname !== "/") {
+            return (
+                <DropdownItem
+                    leftIcon={<Basket />}
+                    route="/">
+                    Home
+                </DropdownItem>
+            )
+        }
+    }
+
+    function MyRecipes() {
+        if (window.location.pathname !== "/My-Recipes") {
+            return (
+                <DropdownItem
+                    leftIcon={<Basket />}
+                    route="/My-Recipes">
+                    My Recipes
+                </DropdownItem>
+            )
+        }
+    }
+    
+    function ShoppingList() {
+        if (window.location.pathname !== "/Shopping-List") {
+            return (
+                <DropdownItem
+                    leftIcon={<Basket />}
+                    route="/Shopping-List">
+                    Shopping List
+                </DropdownItem>
+            )
+        }
+    }
+
+    return (
+        <div className="dropdown absolute top-[80px] right-[3vw]  w-[250px]">
+            <CSSTransition
+                in={activeMenu === 'main'}
+                timeout={500}
+                classNames="menu-primary"
+                unmountOnExit>
+                <div className="menu">
+                    <TopLink></TopLink>
+                    <MyRecipes></MyRecipes>
+                    <ShoppingList></ShoppingList>
+                    <div onClick={signOutUser}>
+                        <DropdownItem
+                            leftIcon={<PersonIcon />}>
+                            Sign Out
+                        </DropdownItem>
+                    </div>
+
+                </div>
+            </CSSTransition>
+        </div>
+    );
+}
+
+*/

@@ -21,14 +21,16 @@ export default function ShoppingList() {
     if (!user) {
         return (
             <>
-                <div className="mx-auto bg-main_bg_color text-text_white min-h-[100vh] flex flex-col">
+                <div className="mx-auto bg-main_bg_color text-text_white on_desktop:min-h-[100vh] flex flex-col">
                     <Header />
                     <div className="w-full basis-auto grow">
                         <div className='mx-auto w-fit'>
                             <SignedOut />
                         </div>
                     </div>
-                    <Footer />
+                    <div className='on_mobile:hidden'>
+                        <Footer />
+                    </div>
                 </div>
             </>
         )
@@ -39,8 +41,8 @@ export default function ShoppingList() {
                 <div className="bg-main_bg_color text-text_white min-h-[100vh] flex flex-col">
                     <Header />
                     <div className="w-full basis-auto grow">
-                        <div className='m-auto rounded-[10px] h-[80%] bg-black w-[90%]'>
-                            <div className='flex gap-20 w-full px-[4%] py-[3%]'>
+                        <div className='m-auto on_desktop:rounded-[10px] on_desktop:h-[80%] bg-black on_desktop:w-[90%] on_mobile:w-full on_mobile:min-h-full'>
+                            <div className='on_mobile:mt-[25px] flex gap-20 w-full px-[4%] py-[3%]'>
                                 <Content />
                             </div>
                         </div>
@@ -66,7 +68,6 @@ function Content() {
         const unsubscribe = onSnapshot(docRef, (doc) => {
             if (doc.exists()) {
                 setShoppingList(doc.data().shoppingList);
-                console.log("Document data:", doc.data().shoppingList);
             } else {
                 console.log("No such document!");
             }
@@ -75,8 +76,6 @@ function Content() {
     }, [user.uid]);
 
     const deleteItem = async (index) => {
-        console.log(index);
-
         // creater a copy of the shopping list
         let shoppingListCopy = [...shoppingList];
 
@@ -109,17 +108,19 @@ function Content() {
             <Helmet>
                 <title>Shopping List</title>
             </Helmet>
-            <div className="flex flex-col ">
-                <div className='flex gap-10'>
-                    <h2 className="text-header font-semibold whitespace-nowrap align-middle">{user.displayName}'s Shopping List</h2>
-                    {shoppingList.length !== 0 ?
+            <div className="flex flex-col w-full">
+                <div className='flex on_desktop:gap-10 on_mobile:justify-between w-full'>
+                    <h2 className="on_mobile:hidden text-header font-semibold whitespace-nowrap align-middle">{user.displayName}'s Shopping List</h2>
+                    <h2 className="on_desktop:hidden text-header font-semibold whitespace-nowrap align-middle">Shopping List</h2>
+                    <>   {shoppingList.length !== 0 ?
                         <button className='my-auto w-fit text-small flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem] h-fit' onClick={clearList}>
-                            <h3 className="font-semibold whitespace-nowrap my-auto">Clear List</h3>
-                            <Trash className="w-auto h-[2.75rem] my-auto" />
+                            <h3 className="on_mobile:hidden font-semibold whitespace-nowrap my-auto">Clear List</h3>
+                            <Trash className="w-auto on_desktop:h-[2.75rem] on_mobile:h-[2.75rem] my-auto" />
                         </button>
                         :
                         <></>
                     }
+                    </>
                 </div>
                 <div>
                     <div className="text-small">
@@ -133,7 +134,7 @@ function Content() {
                                                 <div className="">{item.name}</div>
                                             </div>
                                             <button onClick={() => deleteItem(index)}>
-                                                <Trash className="w-auto h-[90%] hover:invert" />
+                                                <Trash className="w-auto h-[75%] on_desktop:hover:invert" />
                                             </button>
                                         </div>
                                     ))
