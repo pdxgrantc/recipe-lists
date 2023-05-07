@@ -110,7 +110,7 @@ function RecipesList() {
     }
     else {
       // truncate at the nearest word
-      return title.substring(0, 35) + "..."
+      return title.substring(0, 33) + "..."
     }
   }
 
