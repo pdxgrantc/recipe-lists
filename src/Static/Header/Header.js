@@ -7,7 +7,7 @@ import Mobile from './Devices/Mobile'
 export default function Header() {
   return (
     <>
-      <div className='mb-[2.5rem]'>
+      <div className='mb-[4rem]'>
         <div className="w-full on_mobile:hidden">
           <Desktop />
         </div>

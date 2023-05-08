@@ -38,13 +38,16 @@ export default function Home() {
         <Helmet>
           <title>Recipes - Home</title>
         </Helmet>
-        <div className="bg-main_bg_color text-text_white h-[100vh] flex flex-col">
+        <div className="bg-main_bg_color text-text_white min-h-[100vh] flex flex-col">
           <Header />
-          <div className="w-full h-max basis-auto grow">
-            <div className='m-auto rounded-[10px] h-[80%] bg-black w-[90%]'>
-              <div className='flex gap-20 w-[100%] px-[4%] py-[3%]'>
+          <div className="w-full h-full basis-auto">
+            <div className='m-auto on_desktop:rounded-[10px] on_desktop:min-h-[80%] min-h-[85vh] bg-black on_desktop:w-[90%]'>
+              <div className='on_mobile:hidden flex gap-20 w-[100%] px-[4%] py-[3%]'>
                 <SideBar />
                 <NewRecipe />
+              </div>
+              <div className='on_desktop:hidden w-[100%] px-[4%] py-[3%]'>
+                <MobileContent />
               </div>
             </div>
           </div>
@@ -53,6 +56,24 @@ export default function Home() {
       </>
     )
   }
+}
+
+function MobileContent() {
+  return (
+    <div className='flex flex-col gap-5'>
+      <NewRecipe />
+      <div className="flex flex-col w-full">
+        <div className="min-h-[125px]">
+          <div>
+            <h2 className="text-header font-semibold">Recent Recipes</h2>
+            <div className="text-small">
+              <RecipesList />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 function SideBar() {
@@ -104,13 +125,13 @@ function RecipesList() {
     return () => unsubscribe();
   }, [fetchRecipes, user.uid]);
 
-  const titleTruncate = (title) => {
-    if (title.length <= 35) {
+  const titleTruncate = (title, number) => {
+    if (title.length <= (number + 2)) {
       return title
     }
     else {
       // truncate at the nearest word
-      return title.substring(0, 33) + "..."
+      return title.substring(0, number) + "..."
     }
   }
 
@@ -131,19 +152,26 @@ function RecipesList() {
           <div>
             <div className='flex flex-col gap-2 h-fit'>
               {recipes.map((recipe) => (
-                <Link
-                  key={recipe.id}
-                  className="whitespace-nowrap text-[1.6rem] leading-8 cursor-pointer w-fit border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.5vw] py-[.25rem]"
-                  to={"/My-Recipes/" + recipe.title}>
-                  {titleTruncate(recipe.title)}
-                </Link>
+                <div key={recipe.id}>
+                  <Link
+                    className="on_mobile:hidden text-[1.6rem] leading-8 cursor-pointer w-fit border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.5vw] py-[.25rem]"
+                    to={"/All-Recipes/" + recipe.title}>
+                    {titleTruncate(recipe.title, 33)}
+                  </Link>
+                  <Link
+
+                    className="on_desktop:hidden text-small leading-8 cursor-pointer w-fit border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.5vw] py-[.25rem]"
+                    to={"/All-Recipes/" + recipe.title}>
+                    {titleTruncate(recipe.title, 22)}
+                  </Link>
+                </div>
               ))
               }
             </div>
           </div>
           <div className='h-6'></div>
-          <Link to="/My-Recipes"
-            className="whitespace-nowrap text-[1.6rem] leading-8 cursor-pointer w-fit border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.5vw] py-[.25rem]">
+          <Link to="/All-Recipes"
+            className="whitespace-nowrap on_mobile:text-small on_desktop:text-[1.6rem] leading-8 cursor-pointer w-fit border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.5vw] py-[.25rem]">
             All Recipes
           </Link>
         </>

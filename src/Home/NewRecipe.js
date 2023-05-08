@@ -83,31 +83,31 @@ export default function NewRecipe() {
 
     return (
         <div className='w-auto'>
-            <h2 className='text-[3rem] font-semibold'>Create Recipe</h2>
+            <h2 className='text-header font-semibold'>Create Recipe</h2>
             <div>
-                <div className='flex flex-col gap-4 py-4'>
-                    <input className="rounded-[4px] text-black w-[50vw] h-[5vh] text-[1.5rem] border-[1.5px] border-black focus:outline-none px-2"
+                <div className='flex flex-col gap-4 on_desktop:py-4 on_mobile:py-2'>
+                    <input className="rounded-[4px] text-black on_desktop:w-[50vw] h-[5vh] on_desktop:text-small on_mobile:text-xsmall border-[1.5px] border-black focus:outline-none px-2"
                         type='text'
                         placeholder='Recipe Title (you cannot change this later)'
                         value={recipeTitle}
                         onChange={(e) => setRecipeTitle(e.target.value)}
                     />
-                    <input className="rounded-[4px] text-black w-[50vw] h-[5vh] text-[1.5rem] border-[1.5px] border-black focus:outline-none px-2"
+                    <input className="rounded-[4px] text-black on_desktop:w-[50vw] h-[5vh] on_desktop:text-small on_mobile:text-xsmall border-[1.5px] border-black focus:outline-none px-2"
                         type='text'
                         placeholder='Recipe Description (optional)'
                         value={recipeDescription}
                         onChange={(e) => setRecipeDescription(e.target.value)}
                     />
-                    <input className="rounded-[4px] text-black w-[50vw] h-[5vh] text-[1.5rem] border-[1.5px] border-black focus:outline-none px-2"
+                    <input className="rounded-[4px] text-black on_desktop:w-[50vw] h-[5vh] on_desktop:text-small on_mobile:text-xsmall border-[1.5px] border-black focus:outline-none px-2"
                         type='text'
                         placeholder='Recipe Image Link (optional)'
                         value={recipeLink}
                         onChange={(e) => setRecipeLink(e.target.value)}
                     />
                 </div>
-                <div className="flex on_desktop:gap-[1.25vw] on_mobile:gap-[2.5vh] on_mobile:flex-col">
-                    <button onClick={submitToDB} className="cursor-pointer w-fit text-base border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.25vw] py-[.5vh]">Submit</button>
-                    <button onClick={reset} className="cursor-pointer w-fit text-base border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.25vw] py-[.5vh]">Reset</button>
+                <div className="flex on_desktop:gap-[1.25vw] on_mobile:gap-[2.5vw]">
+                    <button onClick={submitToDB} className="cursor-pointer w-fit on_desktop:text-base on_mobile:text-small border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.25vw] py-[.5vh]">Submit</button>
+                    <button onClick={reset} className="cursor-pointer w-fit on_desktop:text-base on_mobile:text-small border-b-[1.5px] on_desktop:hover:bg-button_accent_color on_desktop:hover:ease-[cubic-bezier(0.4, 0, 1, 1)] on_desktop:duration-[350ms] on_desktop:hover:px-[1.25vw] py-[.5vh]">Reset</button>
                 </div>
             </div>
         </div>

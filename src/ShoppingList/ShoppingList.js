@@ -21,16 +21,14 @@ export default function ShoppingList() {
     if (!user) {
         return (
             <>
-                <div className="mx-auto bg-main_bg_color text-text_white on_desktop:min-h-[100vh] flex flex-col">
+                <div className="mx-auto bg-main_bg_color text-text_white min-h-[100vh] flex flex-col">
                     <Header />
                     <div className="w-full basis-auto grow">
                         <div className='mx-auto w-fit'>
                             <SignedOut />
                         </div>
                     </div>
-                    <div className='on_mobile:hidden'>
-                        <Footer />
-                    </div>
+                    <Footer />
                 </div>
             </>
         )
@@ -38,11 +36,14 @@ export default function ShoppingList() {
     else {
         return (
             <>
+                <Helmet>
+                    <title>Shopping List</title>
+                </Helmet>
                 <div className="bg-main_bg_color text-text_white min-h-[100vh] flex flex-col">
                     <Header />
-                    <div className="w-full basis-auto grow">
-                        <div className='m-auto on_desktop:rounded-[10px] on_desktop:h-[80%] bg-black on_desktop:w-[90%] on_mobile:w-full on_mobile:min-h-full'>
-                            <div className='on_mobile:mt-[25px] flex gap-20 w-full px-[4%] py-[3%]'>
+                    <div className="w-full h-full basis-auto">
+                        <div className='m-auto on_desktop:rounded-[10px] on_desktop:min-h-[80%] min-h-[85vh] bg-black on_desktop:w-[90%]'>
+                            <div className='flex gap-20 w-[100%] px-[4%] py-[3%]'>
                                 <Content />
                             </div>
                         </div>

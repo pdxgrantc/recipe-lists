@@ -13,7 +13,7 @@ import Footer from '../Static/Footer/Footer'
 import SignedOut from "../Static/SignedOut"
 
 
-export default function AllRecipes() {
+export default function ShoppingList() {
     const [user] = useAuthState(auth);
 
     if (!user) {
@@ -35,12 +35,12 @@ export default function AllRecipes() {
         return (
             <>
                 <Helmet>
-                    <title>Recipes - Home</title>
+                    <title>All Recipes</title>
                 </Helmet>
                 <div className="bg-main_bg_color text-text_white min-h-[100vh] flex flex-col">
                     <Header />
-                    <div className="w-full h-fit basis-auto grow">
-                        <div className='m-auto rounded-[10px] h-[80%] bg-black w-[90%]'>
+                    <div className="w-full h-full basis-auto">
+                        <div className='m-auto on_desktop:rounded-[10px] on_desktop:min-h-[80%] min-h-[85vh] bg-black on_desktop:w-[90%]'>
                             <div className='flex gap-20 w-[100%] px-[4%] py-[3%]'>
                                 <Content />
                             </div>
@@ -76,7 +76,7 @@ function Content() {
                     Loading...
                 </Helmet>
                 <div className="flex flex-col w-[30%]">
-                    <h2 className="text-[2.75rem] font-semibold leading-10 pb-[2vh] whitespace-nowrap">{user.displayName}'s Recipes</h2>
+                    <h2 className="text-[2.75rem] font-semibold on_desktop:leading-10 pb-[2vh] whitespace-nowrap">{user.displayName}'s Recipes</h2>
                     <h3 className='text-[1.6rem] font-semibold'>Loading...</h3>
                 </div>
             </>
@@ -85,9 +85,9 @@ function Content() {
     else {
         if (recipesData.recipes.length === 0) {
             return (
-                <div className='flex flex-col gap-6 w-[80%] ml-0'>
+                <div className='flex flex-col on_desktop:gap-6 on_mobile:gap-3 on_desktop:w-[80%] on_mobile:w-full on_mobile:px-2 ml-0'>
                     <div className="flex flex-col w-[100%]">
-                        <h2 className="text-[2.75rem] font-semibold leading-10 pb-[.5vh] whitespace-nowrap">{user.displayName}'s Recipes</h2>
+                        <h2 className="text-[2.75rem] font-semibold on_desktop:leading-10 on_desktop:pb-[.5vh] whitespace-nowrap">{user.displayName}'s Recipes</h2>
                     </div>
                     <div className='on_desktop:flex flex-col gap-2 w-full'>
                         <h3 className='text-[1.6rem] font-semibold'>You have no recipes yet.</h3>
@@ -102,17 +102,17 @@ function Content() {
         }
         else {
             return (
-                <div className='flex flex-col gap-6 w-[80%] ml-0'>
+                <div className='flex flex-col on_desktop:gap-6 on_mobile:gap-1 on_desktop:w-[80%] ml-0 pt-3 pb-8'>
                     <div className="flex flex-col w-[100%]">
-                        <h2 className="text-[2.75rem] font-semibold leading-10 pb-[2vh] whitespace-nowrap">{user.displayName}'s Recipes</h2>
+                        <h2 className="text-header font-semibold leading-10 pb-[2vh] whitespace-nowrap">All Recipes</h2>
                     </div>
-                    <div className='on_desktop:grid grid-cols-2 on_mobile:flex on_mobile:flex-col gap-5 w-full'>
+                    <div className='grid on_desktop:grid-cols-2 on_mobile:grid-cols-1 gap-5 w-full'>
                         {recipesData.recipes.map((recipe) => (
                             <Link
                                 key={recipe.id}
                                 className="w-full rounded-[4px] p-3 border-[2px] border-text_white hover:bg-apps_bg_pressed hover:border-transparent"
-                                to={"/My-Recipes/" + recipe.title}>
-                                <h4 className='whitespace-nowrap text-[1.6rem]'>{recipe.title}</h4>
+                                to={"/All-Recipes/" + recipe.title}>
+                                <h4 className=' text-[1.6rem]'>{recipe.title}</h4>
                                 <h5>{recipe.description}</h5>
                             </Link>
                         ))}

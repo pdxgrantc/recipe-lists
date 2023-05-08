@@ -121,7 +121,7 @@ function DropdownMenu() {
     }
 
     function AllRecipes() {
-        if (window.location.pathname !== "/My-Recipes") {
+        if (window.location.pathname !== "/All-Recipes") {
             return (
                 <DropdownItem
                     leftIcon={<Basket />}
@@ -131,7 +131,7 @@ function DropdownMenu() {
             )
         }
     }
-    
+
     function ShoppingList() {
         if (window.location.pathname !== "/Shopping-List") {
             return (

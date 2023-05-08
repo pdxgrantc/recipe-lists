@@ -23,6 +23,7 @@ module.exports = {
       text_teal: "#14cee3",
     },
     fontSize: {
+      xsmall: ['1.1rem'],
       small: ['1.5rem'],
       base: ['2rem'],
       small_header: ['2.25rem'],
