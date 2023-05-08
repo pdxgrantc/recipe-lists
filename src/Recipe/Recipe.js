@@ -41,9 +41,9 @@ export default function Recipe() {
       <>
         <div className="bg-main_bg_color text-text_white min-h-[100vh] flex flex-col">
           <Header />
-          <div className="w-full basis-auto grow">
-            <div className='m-auto rounded-[10px] h-[80%] bg-black w-[90%]'>
-              <div className='flex gap-20 w-full px-[4%] py-[3%]'>
+          <div className="w-full h-full basis-auto">
+            <div className='m-auto on_desktop:rounded-[10px] on_desktop:min-h-[80%] min-h-[85vh] bg-black on_desktop:w-[90%]'>
+              <div className='flex gap-20 w-[100%] px-[4%] py-[3%]'>
                 <Content />
               </div>
             </div>
@@ -219,26 +219,26 @@ function Content() {
       </Helmet>
       <div className='w-full'>
         <div className='flex justify-between w-full'>
-          <h2 className='text-large_header font-semibold pr-12 whitespace-nowrap w-full'>{recipeTitle}</h2>
+          <h2 className='on_desktop:text-large_header on_mobile:text-small_header font-semibold pr-12 w-full'>{recipeTitle}</h2>
           <div className='flex my-auto text-base'>
             {isEditing ?
               <>
                 <button onClick={saveRecipe} className='flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem]'>
                   <Save className='my-auto w-auto h-[2rem]' />
-                  <h4 className='text-2xl font-semibold'>Save</h4>
+                  <h4 className='on_mobile:hidden text-2xl font-semibold'>Save</h4>
                 </button>
               </>
               :
               <>
                 <button onClick={() => setIsEditing(!isEditing)} className='flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem]'>
                   <Pencil className='my-auto w-auto h-[2rem]' />
-                  <h4 className='text-2xl font-semibold'>Edit</h4>
+                  <h4 className='on_mobile:hidden text-2xl font-semibold'>Edit</h4>
                 </button>
               </>
             }
             <button onClick={deleteRecipe} className='flex gap-2 cursor-pointer hover:bg-text_grey hover:bg-opacity-50 transition duration-[300ms] rounded-[4px] px-[1rem] py-[.5rem]'>
               <Trash className='my-auto w-auto h-[1.9rem]' />
-              <h4 className='text-2xl font-semibold'>Delete</h4>
+              <h4 className='on_mobile:hidden text-2xl font-semibold'>Delete</h4>
             </button>
           </div>
         </div>
@@ -255,22 +255,22 @@ function Content() {
             </div>
             <div className='flex flex-col text-small'>
               <h3 className='text-small_header font-semibold'>Ingredients</h3>
-              <div className='flex flex-col gap-2 my-2 ml-3'>
+              <div className='flex flex-col gap-2 my-2 on_desktop:ml-3 on_mobile:w-full'>
                 {recipeIngredients.map((ingredient, index) => (
-                  <div className='flex gap-3' key={index}>
-                    <div className='flex gap-2'>
-                      <label>{index + 1}. </label>
+                  <div className='flex gap-3 on_mobile:w-full' key={index}>
+                    <label className='on_mobile:my-auto'>{index + 1}. </label>
+                    <div className='flex on_mobile:flex-col gap-2 on_mobile:w-full'>
                       <input
                         value={ingredient.amount}
                         placeholder='Amount'
                         onChange={(event) => handleIngredientChange(index, "amount", event.target.value)}
-                        className='outline-none text-black px-2 rounded-[4px]'
+                        className='outline-none text-black px-2 rounded-[4px] on_mobile:w-full'
                       />
                       <input
                         value={ingredient.name}
                         placeholder='Name of ingredient'
                         onChange={(event) => handleIngredientChange(index, "name", event.target.value)}
-                        className='outline-none text-black px-2 rounded-[4px]'
+                        className='outline-none text-black px-2 rounded-[4px] on_mobile:w-full'
                       />
                     </div>
                     <button
@@ -289,17 +289,17 @@ function Content() {
                 Add Ingredient
               </button>
             </div>
-            <div className='flex flex-col text-small'>
+            <div className='flex flex-col text-small on_mobile:w-full'>
               <h3 className='text-small_header font-semibold'>Instructions</h3>
-              <div className='flex flex-col gap-2 m-2 ml-3'>
+              <div className='flex flex-col gap-2 my-2 on_desktop:ml-3 on_mobile:w-full'>
                 {recipeInstructions.map((instruction, index) => (
-                  <div className='flex gap-3' key={index}>
+                  <div className='flex gap-3 w-full' key={index}>
                     <label>{index + 1}. </label>
                     <input
                       value={instruction}
                       placeholder='Instruction'
                       onChange={(event) => handleInstructionChange(index, event.target.value)}
-                      className='outline-none text-black px-2 rounded-[4px]'
+                      className='outline-none text-black px-2 rounded-[4px] on_mobile:w-full'
                     />
                     <button
                       onClick={() => deleteInstruction(index)}
@@ -319,7 +319,7 @@ function Content() {
             </div>
             <div className='flex flex-col text-small'>
               <h3 className='text-small_header font-semibold'>Notes</h3>
-              <div className='flex flex-col gap-2 mb-2 ml-3'>
+              <div className='flex flex-col gap-2 my-2 on_desktop:ml-3'>
                 {recipeNotes.map((note, index) => (
                   <div className='flex gap-3' key={index}>
                     <label>{index + 1}. </label>
@@ -348,7 +348,7 @@ function Content() {
             <div className='flex flex-col gap-2 text-small'>
               <h3 className='text-small_header font-semibold'>Description</h3>
               <textarea
-                className='w-full h-[10rem] outline-none text-black px-3 py-2 text-small rounded-[4px] ml-3'
+                className='w-full min-h-[10rem] outline-none text-black px-3 py-2 text-small rounded-[4px] on_desktop:ml-3 on_mobile:mr-2'
                 placeholder='Description'
                 onChange={(event) => setRecipeDescription(event.target.value)}
                 value={recipeDescription}>
@@ -356,12 +356,12 @@ function Content() {
             </div>
           </div>
           :
-          <div className='grid grid-cols-2 gap-10 mt-5'>
+          <div className='grid on_desktop:grid-cols-2 on_mobile:grid-cols-1 on_desktop:gap-10 on_mobile:gap-3 mt-5 mr-2'>
             {!(recipeImageURL === '') ? <img className='w-full h-auto rounded-[4px]' src={recipeImageURL} alt='user recipe' /> : <></>}
             {!(recipeDescription === '') ?
               <div className='flex flex-col text-small'>
                 <h3 className='text-small_header font-semibold'>Description</h3>
-                <p className='w-full h-[10rem] text-small rounded-[4px] ml-3'>
+                <p className='w-full text-small rounded-[4px] on_desktop:ml-3'>
                   {recipeDescription}
                 </p>
               </div>
