@@ -102,9 +102,9 @@ function Content() {
         }
         else {
             return (
-                <div className='flex flex-col on_desktop:gap-6 on_mobile:gap-1 on_desktop:w-[80%] ml-0 pt-3 pb-8'>
+                <div className='flex flex-col on_desktop:gap-2 ml-0 pb-8'>
                     <div className="flex flex-col w-[100%]">
-                        <h2 className="text-header font-semibold leading-10 pb-[2vh] whitespace-nowrap">All Recipes</h2>
+                        <h2 className="text-header font-semibold whitespace-nowrap">All Recipes</h2>
                     </div>
                     <div className='grid on_desktop:grid-cols-2 on_mobile:grid-cols-1 gap-5 w-full'>
                         {recipesData.recipes.map((recipe) => (
